@@ -1,0 +1,30 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('seat_types', function (Blueprint $table) {
+            $table->bigIncrements('id'); // ID com auto-incremento
+            $table->string('name', 255); // Nome do tipo de assento
+            $table->text('description')->nullable(); // Descrição do tipo de assento
+            $table->decimal('price', 10, 2); // Preço do tipo de assento
+            $table->timestamps(); // Cria os campos created_at e updated_at
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('seat_types');
+    }
+};
