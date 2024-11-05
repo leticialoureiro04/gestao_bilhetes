@@ -1,20 +1,35 @@
-<div class="container">
-    <h1>Adicionar Equipa</h1>
+@extends('layouts.app')
 
-    <form action="{{ route('teams.store') }}" method="POST">
-        @csrf
-        <div class="mb-3">
-            <label for="name" class="form-label">Nome</label>
-            <input type="text" name="name" class="form-control" required>
+@section('content')
+<div class="container">
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Adicionar Equipa</h3>
         </div>
-        <div class="mb-3">
-            <label for="city" class="form-label">Cidade</label>
-            <input type="text" name="city" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="founded" class="form-label">Data de Fundação</label>
-            <input type="date" name="founded" class="form-control">
-        </div>
-        <button type="submit" class="btn btn-primary">Salvar</button>
-    </form>
+        <form action="{{ route('teams.store') }}" method="POST">
+            @csrf
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="name">Nome</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="city">Cidade</label>
+                    <input type="text" class="form-control" id="city" name="city">
+                </div>
+                <div class="form-group">
+                    <label for="founded">Data de Fundação</label>
+                    <input type="date" class="form-control" id="founded" name="founded">
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{{ route('teams.index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </a>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    </div>
 </div>
+@endsection
+

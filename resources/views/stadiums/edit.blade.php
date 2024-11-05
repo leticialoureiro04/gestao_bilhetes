@@ -1,17 +1,39 @@
+@extends('layouts.app')
 
-    <h1>Editar Estádio</h1>
+@section('content')
+<div class="container">
+    <div class="card card-warning">
+        <div class="card-header">
+            <h3 class="card-title">Editar Estádio</h3>
+        </div>
+        <!-- /.card-header -->
+        <form action="{{ route('stadiums.update', $stadium->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="name">Nome</label>
+                    <input type="text" class="form-control" name="name" id="name" value="{{ $stadium->name }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="location">Localização</label>
+                    <input type="text" class="form-control" name="location" id="location" value="{{ $stadium->location }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="capacity">Capacidade</label>
+                    <input type="number" class="form-control" name="capacity" id="capacity" value="{{ $stadium->capacity }}" required>
+                </div>
+            </div>
+            <!-- /.card-body -->
 
-    <form action="{{ route('stadiums.update', $stadium->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <label for="name">Nome:</label>
-        <input type="text" name="name" id="name" value="{{ $stadium->name }}" required>
+            <div class="card-footer">
+                <a href="{{ route('stadiums.index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </a>
+                <button type="submit" class="btn btn-warning">Atualizar Estádio</button>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
 
-        <label for="location">Localização:</label>
-        <input type="text" name="location" id="location" value="{{ $stadium->location }}" required>
-
-        <label for="capacity">Capacidade:</label>
-        <input type="number" name="capacity" id="capacity" value="{{ $stadium->capacity }}" required>
-
-        <button type="submit">Atualizar Estádio</button>
-    </form>

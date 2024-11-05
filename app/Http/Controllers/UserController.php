@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -23,9 +24,6 @@ class UserController extends Controller
         return view('users.index', compact('users'));
     }
 
-
-
-
     // Função para mostrar o formulário de criação de utilizador
     public function create()
     {
@@ -34,28 +32,23 @@ class UserController extends Controller
 
     // Função para guardar o novo utilizador na base de dados
     public function store(Request $request)
-{
-    $validatedData = $request->validate([
-        'name' => 'required|max:255',
-        'email' => 'required|email|unique:users',
-        'password' => 'required|min:8',
-    ]);
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:8',
+        ]);
 
-    $user = User::create([
-        'name' => $validatedData['name'],
-        'email' => $validatedData['email'],
-        'password' => bcrypt($validatedData['password']),
-    ]);
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => bcrypt($validatedData['password']),
+        ]);
 
-    $user->syncRoles(['cliente']);
+        $user->syncRoles(['cliente']);
 
-
-
-    return redirect()->route('users.index')->with('success', 'Utilizador criado com sucesso e atribuído o papel de Cliente.');
-}
-
-
-
+        return redirect()->route('users.index')->with('success', 'Utilizador criado com sucesso e atribuído o papel de Cliente.');
+    }
 
     // Função para mostrar o formulário de edição de utilizador
     public function edit(User $user)
@@ -97,4 +90,12 @@ class UserController extends Controller
         $user->syncRoles([$request->role]);
         return redirect()->route('users.index')->with('success', 'Papel atribuído com sucesso!');
     }
+
+    // Função para exibir o perfil do utilizador autenticado
+    public function profile()
+    {
+        $user = Auth::user(); // Obter o usuário autenticado
+        return view('users.profile', compact('user'));
+    }
 }
+

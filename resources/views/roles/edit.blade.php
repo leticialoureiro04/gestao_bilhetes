@@ -1,9 +1,28 @@
-<!-- resources/views/roles/edit.blade.php -->
-<h1>Editar Papel</h1>
-<form action="{{ route('roles.update', $role->id) }}" method="POST">
-    @csrf
-    @method('PUT')
-    <label for="name">Nome do Papel:</label>
-    <input type="text" name="name" id="name" value="{{ $role->name }}" required>
-    <button type="submit">Atualizar</button>
-</form>
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <div class="card card-warning">
+        <div class="card-header">
+            <h3 class="card-title">Editar Papel</h3>
+        </div>
+        <form action="{{ route('roles.update', $role->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="name">Nome do Papel</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{ $role->name }}" required>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{{ route('roles.index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </a>
+                <button type="submit" class="btn btn-warning">Atualizar</button>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
+

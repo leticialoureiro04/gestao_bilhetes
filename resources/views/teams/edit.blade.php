@@ -1,21 +1,36 @@
-<div class="container">
-    <h1>Editar Equipa</h1>
+@extends('layouts.app')
 
-    <form action="{{ route('teams.update', $team->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <div class="mb-3">
-            <label for="name" class="form-label">Nome</label>
-            <input type="text" name="name" class="form-control" value="{{ $team->name }}" required>
+@section('content')
+<div class="container">
+    <div class="card card-warning">
+        <div class="card-header">
+            <h3 class="card-title">Editar Equipa</h3>
         </div>
-        <div class="mb-3">
-            <label for="city" class="form-label">Cidade</label>
-            <input type="text" name="city" class="form-control" value="{{ $team->city }}">
-        </div>
-        <div class="mb-3">
-            <label for="founded" class="form-label">Data de Fundação</label>
-            <input type="date" name="founded" class="form-control" value="{{ $team->founded }}">
-        </div>
-        <button type="submit" class="btn btn-primary">Atualizar</button>
-    </form>
+        <form action="{{ route('teams.update', $team->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="name">Nome</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{ $team->name }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="city">Cidade</label>
+                    <input type="text" class="form-control" id="city" name="city" value="{{ $team->city }}">
+                </div>
+                <div class="form-group">
+                    <label for="founded">Data de Fundação</label>
+                    <input type="date" class="form-control" id="founded" name="founded" value="{{ $team->founded }}">
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{{ route('teams.index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </a>
+                <button type="submit" class="btn btn-warning">Atualizar</button>
+            </div>
+        </form>
+    </div>
 </div>
+@endsection
+

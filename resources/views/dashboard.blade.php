@@ -1,39 +1,108 @@
-<x-app-layout>
-    <x-slot name="header">
+@extends('layouts.app')
+
+@section('title', 'Dashboard')
+
+@section('content')
+    <div class="container-fluid">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Dashboard') }}
         </h2>
-    </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-                <x-welcome />
-
-                {{-- Verificar se o utilizador tem o papel de 'admin' --}}
-                @if(auth()->user()->hasRole('admin'))
-                    <div class="mt-4">
-                        <a href="{{ url('/users') }}" class="btn btn-primary">Gerir Utilizadores</a>
-                        <a href="{{ route('stadiums.index') }}" class="btn btn-primary">Gerir Estádios</a>
-                        <a href="{{ route('stadium_plans.index') }}" class="btn btn-primary">Gerir Plantas de Estádio</a>
-                        <a href="{{ route('games.index') }}" class="btn btn-primary">Gerir Jogos</a>
-                        <a href="{{ route('seat_types.index') }}" class="btn btn-primary">Gerir Tipos de Lugares</a>
-                        <a href="{{ route('seats.index') }}" class="btn btn-primary">Gerir Lugares</a>
-                        <a href="{{ route('roles.index') }}" class="btn btn-primary">Lista de roles</a>
-                        <a href="{{ route('teams.index') }}" class="btn btn-primary">Gerir Equipas</a>
-                        <a href="{{ route('tickets.index') }}" class="btn btn-primary">Gestão de Bilhetes</a>
+        <!-- Dashboard para Administrador -->
+        @if(auth()->user()->hasRole('admin'))
+            <div class="row mt-4">
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>150</h3>
+                            <p>Utilizadores</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <a href="{{ url('/users') }}" class="small-box-footer">Gerir Utilizadores <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
-                @endif
+                </div>
 
-                {{-- Verificar se o utilizador tem a permissão de 'buy tickets' --}}
-                @if(auth()->user()->can('buy tickets'))
-                    <div class="mt-4">
-                        <a href="{{ route('tickets.index') }}" class="btn btn-primary">Ver Bilhetes</a>
-                        <a href="{{ route('tickets.create') }}" class="btn btn-primary">Comprar Bilhete</a>
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3>53</h3>
+                            <p>Estádios</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <a href="{{ route('stadiums.index') }}" class="small-box-footer">Gerir Estádios <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
-                @endif
+                </div>
 
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>44</h3>
+                            <p>Jogos</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-futbol"></i>
+                        </div>
+                        <a href="{{ route('games.index') }}" class="small-box-footer">Gerir Jogos <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-danger">
+                        <div class="inner">
+                            <h3>65</h3>
+                            <p>Bilhetes</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <a href="{{ route('tickets.index') }}" class="small-box-footer">Gerir Bilhetes <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
             </div>
-        </div>
+        @else
+            <!-- Dashboard simplificado para Cliente -->
+            <div class="row mt-4">
+                <div class="col-lg-6 col-12">
+                    <div class="small-box bg-primary" style="position: relative; overflow: hidden;">
+                        <div class="inner text-center py-3">
+                            <h4 class="font-weight-bold">Ver Bilhetes</h4>
+                            <p>Acesse seus bilhetes disponíveis</p>
+                        </div>
+                        <div class="icon" style="top: 50%; right: 15px; font-size: 2.5rem; transform: translateY(-50%); position: absolute; opacity: 0.15;">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <a href="{{ route('tickets.index') }}" class="small-box-footer">Ver Bilhetes <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-12">
+                    <div class="small-box bg-success" style="position: relative; overflow: hidden;">
+                        <div class="inner text-center py-3">
+                            <h4 class="font-weight-bold">Comprar Bilhete</h4>
+                            <p>Adquira novos bilhetes</p>
+                        </div>
+                        <div class="icon" style="top: 50%; right: 15px; font-size: 2.5rem; transform: translateY(-50%); position: absolute; opacity: 0.15;">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <a href="{{ route('tickets.create') }}" class="small-box-footer">Comprar Bilhete <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
-</x-app-layout>
+@endsection
+
+
+
+
+
+
+
+
+
+
+

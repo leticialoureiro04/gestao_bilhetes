@@ -31,6 +31,9 @@ Route::middleware([
     })->name('dashboard');
 });
 
+// Rota de perfil
+Route::get('/perfil', [UserController::class, 'profile'])->name('profile');
+
 // Aqui adicionas a rota para o CRUD de utilizadores
 Route::resource('users', UserController::class);
 

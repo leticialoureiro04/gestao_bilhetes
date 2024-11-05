@@ -1,46 +1,60 @@
+@extends('layouts.app')
+
+@section('content')
 <div class="container">
-    <h1>Editar Jogo</h1>
-
-    <form action="{{ route('games.update', $game->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-
-        <div class="mb-3">
-            <label for="stadium_id" class="form-label">Estádio</label>
-            <select name="stadium_id" id="stadium_id" class="form-control" required>
-                @foreach($stadiums as $stadium)
-                    <option value="{{ $stadium->id }}" {{ $stadium->id == $game->stadium_id ? 'selected' : '' }}>{{ $stadium->name }}</option>
-                @endforeach
-            </select>
+    <div class="card card-warning">
+        <div class="card-header">
+            <h3 class="card-title">Editar Jogo</h3>
         </div>
-
-        <div class="mb-3">
-            <label for="date_time" class="form-label">Data e Hora</label>
-            <input type="datetime-local" class="form-control" id="date_time" name="date_time" value="{{ $game->date_time }}" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="home_team" class="form-label">Equipa Casa</label>
-            <select name="teams[home]" id="home_team" class="form-control" required>
-                @foreach($teams as $team)
-                    <option value="{{ $team->id }}" {{ $game->teams->where('pivot.role', 'home')->first()?->id == $team->id ? 'selected' : '' }}>
-                        {{ $team->name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="away_team" class="form-label">Equipa Visitante</label>
-            <select name="teams[away]" id="away_team" class="form-control" required>
-                @foreach($teams as $team)
-                    <option value="{{ $team->id }}" {{ $game->teams->where('pivot.role', 'away')->first()?->id == $team->id ? 'selected' : '' }}>
-                        {{ $team->name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Atualizar</button>
-    </form>
+        <form action="{{ route('games.update', $game->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="stadium_id">Estádio</label>
+                    <select name="stadium_id" id="stadium_id" class="form-control" required>
+                        @foreach($stadiums as $stadium)
+                            <option value="{{ $stadium->id }}" {{ $stadium->id == $game->stadium_id ? 'selected' : '' }}>
+                                {{ $stadium->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date_time">Data e Hora</label>
+                    <input type="datetime-local" class="form-control" id="date_time" name="date_time" value="{{ $game->date_time }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="home_team">Equipa Casa</label>
+                    <select name="teams[home]" id="home_team" class="form-control" required>
+                        @foreach($teams as $team)
+                            <option value="{{ $team->id }}" {{ $game->teams->where('pivot.role', 'home')->first()?->id == $team->id ? 'selected' : '' }}>
+                                {{ $team->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="away_team">Equipa Visitante</label>
+                    <select name="teams[away]" id="away_team" class="form-control" required>
+                        @foreach($teams as $team)
+                            <option value="{{ $team->id }}" {{ $game->teams->where('pivot.role', 'away')->first()?->id == $team->id ? 'selected' : '' }}>
+                                {{ $team->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{{ route('games.index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </a>
+                <button type="submit" class="btn btn-warning">
+                    Atualizar
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
+@endsection
+
