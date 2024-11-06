@@ -56,9 +56,6 @@
     $(document).ready(function() {
         $('#seatTypesTable').DataTable({
             responsive: true,
-            language: {
-                url: "//cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese.json"
-            }
         });
     });
 </script>

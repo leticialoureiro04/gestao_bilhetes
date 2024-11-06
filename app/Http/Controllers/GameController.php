@@ -9,10 +9,18 @@ use Illuminate\Http\Request;
 
 class GameController extends Controller
 {
+    // Exibe a lista de jogos para o usuário selecionar
     public function index()
     {
         $games = Game::with('stadium', 'teams')->get();
         return view('games.index', compact('games'));
+    }
+
+    // Redireciona para a escolha da planta do estádio com base no jogo selecionado
+    public function select($game_id)
+    {
+        $game = Game::with('stadium')->findOrFail($game_id);
+        return redirect()->route('stadium.plans', ['game_id' => $game->id]);
     }
 
     public function create()
@@ -73,5 +81,6 @@ class GameController extends Controller
         return redirect()->route('games.index')->with('success', 'Jogo eliminado com sucesso!');
     }
 }
+
 
 

@@ -17,4 +17,9 @@ class Stadium extends Model
     {
         return $this->hasMany(StadiumPlan::class);
     }
+
+    public function game()
+    {
+        return $this->hasOne(Game::class);
+    }
 }

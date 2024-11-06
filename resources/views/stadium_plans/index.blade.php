@@ -56,9 +56,6 @@
     $(document).ready(function() {
         $('#stadiumPlansTable').DataTable({
             responsive: true,
-            language: {
-                url: "https://cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese.json"
-            }
         });
     });
 </script>

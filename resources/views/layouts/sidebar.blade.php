@@ -13,7 +13,9 @@
                 <img src="{{ asset('adminlte/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">{{ Auth::user()->name }}</a>
+                <a href="#" class="d-block">
+                    {{ Auth::check() ? Auth::user()->name : 'Visitante' }}
+                </a>
             </div>
         </div>
 
@@ -30,15 +32,12 @@
                 </li>
 
                 <!-- Condicional para verificar se o usuário é um admin -->
-                @if(auth()->user()->hasRole('admin'))
+                @if(auth()->check() && auth()->user()->hasRole('admin'))
                     <!-- Administração Dropdown Menu para Administradores -->
                     <li class="nav-item has-treeview">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-cog"></i>
-                            <p>
-                                Administração
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
+                            <p>Administração</p>
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">

@@ -2,50 +2,31 @@
 
 @section('content')
 <div class="container">
+    <h3>Meus Bilhetes</h3>
     <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Lista de Equipas</h3>
-            <a href="{{ route('teams.create') }}" class="btn btn-primary float-right">
-                <i class="fas fa-plus"></i> Adicionar Equipa
-            </a>
-        </div>
         <div class="card-body">
-            <table id="teamsTable" class="table table-bordered table-striped">
+            <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Nome</th>
-                        <th>Cidade</th>
-                        <th>Fundação</th>
-                        <th>Ações</th>
+                        <th>Planta</th>
+                        <th>Tipo de Lugar</th>
+                        <th>Status</th>
+                        <th>Data de Compra</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($teams as $team)
+                    @foreach($tickets as $ticket)
                         <tr>
-                            <td>{{ $team->id }}</td>
-                            <td>{{ $team->name }}</td>
-                            <td>{{ $team->city }}</td>
-                            <td>{{ $team->founded }}</td>
-                            <td>
-                                <a href="{{ route('teams.edit', $team->id) }}" class="btn btn-warning btn-sm">
-                                    <i class="fas fa-edit"></i> Editar
-                                </a>
-                                <form action="{{ route('teams.destroy', $team->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja eliminar esta equipa?')">
-                                        <i class="fas fa-trash"></i> Eliminar
-                                    </button>
-                                </form>
-                            </td>
+                            <td>{{ $ticket->id }}</td>
+                            <td>{{ $ticket->seat->stadiumPlan->name ?? 'N/A' }}</td>
+                            <td>{{ $ticket->seat->seatType->name ?? 'N/A' }}</td>
+                            <td>{{ $ticket->status }}</td>
+                            <td>{{ $ticket->created_at->format('d/m/Y H:i') }}</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
-            <div class="mt-3">
-                <p class="text-muted">Total de equipas: {{ $teams->count() }}</p>
-            </div>
         </div>
     </div>
 </div>
@@ -54,11 +35,8 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
-        $('#teamsTable').DataTable({
+        $('#stadiumPlansTable').DataTable({
             responsive: true,
-            language: {
-                url: "https://cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese.json"
-            }
         });
     });
 </script>
