@@ -17,7 +17,7 @@
 
         // Desenhar o retângulo do campo (campo de jogo) em verde claro
         ctx.fillStyle = '#90EE90'; // Verde claro
-        ctx.fillRect(100, 100, 600, 400); // Ajuste as dimensões conforme necessário
+        ctx.fillRect(100, 100, 600, 400); 
 
         // Assumindo que os lugares foram passados do controlador como uma variável JavaScript
         const seats = @json($seats);

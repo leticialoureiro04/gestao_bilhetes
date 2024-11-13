@@ -4,7 +4,7 @@
 <div class="container">
     <h3>Lugares para a Planta: {{ $stadiumPlan->name }}</h3>
     <canvas id="stadiumCanvas" width="800" height="600" style="border:1px solid #000000;"></canvas>
-    <button id="buyTickets" class="btn btn-primary mt-3">Comprar Bilhetes</button>
+    <button id="buyTickets" class="btn btn-primary mt-3" disabled>Comprar Bilhetes</button>
 </div>
 @endsection
 
@@ -15,20 +15,27 @@
         const ctx = canvas.getContext('2d');
         let selectedSeats = []; // Array para armazenar lugares selecionados
 
-        // Configuração inicial do campo (campo de jogo)
-        ctx.fillStyle = 'green';
-        ctx.fillRect(200, 150, 400, 300);
+        // Configuração inicial do fundo do estádio
+        ctx.fillStyle = '#a8e6cf'; // Verde claro para o fundo do estádio
+        ctx.fillRect(50, 50, 700, 500);
 
-        // Assumindo que os lugares foram passados do controlador como uma variável JavaScript
-        const seats = @json($seats); // Isso recupera os lugares da planta atual
+
+        const seats = @json($seats).map(seat => {
+            return {
+                ...seat,
+                x_position: seat.x_position + 100,
+                y_position: seat.y_position + 350
+            };
+        });
 
         // Função para desenhar os lugares como círculos
         function drawSeats() {
             seats.forEach(seat => {
-                ctx.fillStyle = seat.status === 'vendido' ? 'gray' : seat.color || 'blue';
+                ctx.fillStyle = seat.status === 'vendido' ? 'red' : 'green';
                 ctx.beginPath();
-                ctx.arc(seat.x_position, seat.y_position, 10, 0, 2 * Math.PI); // Desenhar círculos para os lugares
+                ctx.arc(seat.x_position, seat.y_position, 10, 0, 2 * Math.PI);
                 ctx.fill();
+                ctx.closePath();
             });
         }
 
@@ -46,9 +53,10 @@
 
                 // Verificar se o clique está dentro do raio do círculo do lugar
                 if (distance <= 10 && seat.status !== 'vendido') {
-                    seat.color = seat.color === 'blue' ? 'red' : 'blue';
+                    // Alternar a seleção do lugar
+                    seat.color = seat.color === 'green' ? 'blue' : 'green';
 
-                    if (seat.color === 'red') {
+                    if (seat.color === 'blue') {
                         if (!selectedSeats.includes(seat.id)) {
                             selectedSeats.push(seat.id);
                         }
@@ -58,11 +66,14 @@
 
                     // Atualizar o canvas
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.fillStyle = 'green';
-                    ctx.fillRect(200, 150, 400, 300);
+                    ctx.fillStyle = '#a8e6cf';
+                    ctx.fillRect(50, 50, 700, 500); 
                     drawSeats();
                 }
             });
+
+            // Habilitar o botão de compra se houver lugares selecionados
+            document.getElementById('buyTickets').disabled = selectedSeats.length === 0;
         });
 
         // Função para enviar os lugares selecionados para o servidor
@@ -72,26 +83,15 @@
                 return;
             }
 
-            // Exibe os lugares selecionados no console para verificação
-            console.log("Lugares selecionados:", selectedSeats);
-
             fetch('/buy-tickets', {
-            method: 'POST',  // Certifique-se de que o método é POST
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken
-            },
-            body: JSON.stringify({ seats: selectedSeats })
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ seats: selectedSeats })
             })
-
-            .then(response => {
-                // Verifica se a resposta foi bem-sucedida
-                if (!response.ok) {
-                    console.error('Erro na resposta do servidor:', response);
-                    throw new Error('Erro ao processar o pedido');
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     alert('Compra realizada com sucesso!');
@@ -109,5 +109,12 @@
     });
 </script>
 @endpush
+
+
+
+
+
+
+
 
 

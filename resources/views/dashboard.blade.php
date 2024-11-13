@@ -70,7 +70,7 @@
                     <div class="small-box bg-primary" style="position: relative; overflow: hidden;">
                         <div class="inner text-center py-3">
                             <h4 class="font-weight-bold">Ver Bilhetes</h4>
-                            <p>Acesse seus bilhetes disponíveis</p>
+                            <p>Aceda aos bilhetes disponíveis</p>
                         </div>
                         <div class="icon" style="top: 50%; right: 15px; font-size: 2.5rem; transform: translateY(-50%); position: absolute; opacity: 0.15;">
                             <i class="fas fa-ticket-alt"></i>
