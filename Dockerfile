@@ -33,8 +33,9 @@ COPY ./.docker/nginx/default.conf /etc/nginx/sites-available/default
 # Copiar o supervisord.conf para o local apropriado
 COPY ./.docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Configuração do PHP-FPM para escutar na porta 9000
-RUN echo "listen = 127.0.0.1:9000" > /usr/local/etc/php-fpm.d/zz-docker.conf
+# Configuração do PHP-FPM para escutar na porta 9000 (não necessário se o www.conf já define isso)
+# Remover ou ajustar conforme necessário
+# RUN echo "listen = 127.0.0.1:9000" > /usr/local/etc/php-fpm.d/zz-docker.conf
 
 # Otimizações de cache para Laravel
 RUN php artisan config:cache && \
