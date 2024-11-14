@@ -39,8 +39,8 @@ RUN php artisan config:cache && \
     php artisan view:cache
 
 # Ajustar permissões finais para pastas de cache e storage
-RUN chmod -R 755 /var/www/html/storage && \
-    chmod -R 755 /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Expor a porta para o Nginx
 EXPOSE 80
