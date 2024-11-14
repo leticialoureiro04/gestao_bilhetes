@@ -46,5 +46,5 @@ RUN chmod -R 755 /var/www/html/storage && \
 EXPOSE 80
 
 # Configuração de entrada para iniciar o supervisor, que gerencia Nginx e PHP-FPM
-CMD ["/usr/bin/supervisord"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 
