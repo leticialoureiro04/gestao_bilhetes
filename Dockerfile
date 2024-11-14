@@ -33,6 +33,9 @@ COPY ./.docker/nginx/default.conf /etc/nginx/sites-available/default
 # Copiar o supervisord.conf para o local apropriado
 COPY ./.docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Configuração do PHP-FPM para escutar na porta 9000
+RUN echo "listen = 127.0.0.1:9000" > /usr/local/etc/php-fpm.d/zz-docker.conf
+
 # Otimizações de cache para Laravel
 RUN php artisan config:cache && \
     php artisan route:cache && \
@@ -44,7 +47,8 @@ RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Criar e dar permissão aos arquivos de log para o PHP-FPM
 RUN touch /var/log/php-fpm.stdout.log /var/log/php-fpm.stderr.log /var/log/php-fpm.log
-RUN chmod 777 /var/log/php-fpm.stdout.log /var/log/php-fpm.stderr.log /var/log/php-fpm.log
+RUN chmod 644 /var/log/php-fpm.stdout.log /var/log/php-fpm.stderr.log /var/log/php-fpm.log
+RUN chown www-data:www-data /var/log/php-fpm.stdout.log /var/log/php-fpm.stderr.log /var/log/php-fpm.log
 
 # Expor a porta para o Nginx
 EXPOSE 80
@@ -52,8 +56,4 @@ EXPOSE 80
 # Configuração de entrada para iniciar o supervisor, que gerencia Nginx e PHP-FPM
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 
-RUN chown www-data:www-data /var/log/php-fpm.stdout.log /var/log/php-fpm.stderr.log /var/log/php-fpm.log
-RUN chmod 644 /var/log/php-fpm.stdout.log /var/log/php-fpm.stderr.log /var/log/php-fpm.log
-
-RUN echo "listen = 127.0.0.1:9000" >> /usr/local/etc/php-fpm.d/www.conf
 
