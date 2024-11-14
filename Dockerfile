@@ -48,3 +48,10 @@ EXPOSE 80
 # Configuração de entrada para iniciar o supervisor, que gerencia Nginx e PHP-FPM
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 
+# Definir permissões para o log de erro
+RUN chmod 777 /proc/self/fd/2
+RUN touch /var/log/php-fpm.log
+
+# Configuração de log para o PHP-FPM
+RUN touch /var/log/php-fpm.stdout.log /var/log/php-fpm.stderr.log
+RUN chmod 777 /var/log/php-fpm.stdout.log /var/log/php-fpm.stderr.log
