@@ -1,5 +1,5 @@
 # Usar uma imagem base de PHP com Nginx para Laravel
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
 # Instalar dependências para MySQL e extensões do PHP necessárias para Laravel
 RUN apt-get update && apt-get install -y \
