@@ -9,10 +9,10 @@ class Stadium extends Model
 {
     use HasFactory;
 
-    protected $table = 'stadiums'; 
+    protected $table = 'stadiums';
 
 
-    protected $fillable = ['name', 'location', 'capacity'];
+    protected $fillable = ['name', 'location', 'capacity', 'num_stands'];
     public function plans()
     {
         return $this->hasMany(StadiumPlan::class);
@@ -22,4 +22,9 @@ class Stadium extends Model
     {
         return $this->hasOne(Game::class);
     }
+
+    public function stands()
+{
+    return $this->hasMany(Stand::class);
+}
 }

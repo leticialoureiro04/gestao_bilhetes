@@ -23,6 +23,10 @@
                     <label for="capacity">Capacidade</label>
                     <input type="number" class="form-control" name="capacity" id="capacity" value="{{ $stadium->capacity }}" required>
                 </div>
+                <div class="form-group">
+                    <label for="num_stands">Número de Bancadas</label>
+                    <input type="number" class="form-control" name="num_stands" id="num_stands" placeholder="Escolha o número de bancadas (1-4)" min="1" max="4" required>
+                </div>
             </div>
             <!-- /.card-body -->
 

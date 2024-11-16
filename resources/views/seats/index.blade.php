@@ -15,7 +15,10 @@
                     <tr>
                         <th>ID</th>
                         <th>Estádio</th>
+                        <th>Bancada</th>
                         <th>Planta do Estádio</th>
+                        <th>Número da Linha</th>
+                        <th>Número do Assento</th>
                         <th>Tipo de Lugar</th>
                         <th>Status</th>
                         <th>Ações</th>
@@ -25,10 +28,13 @@
                     @foreach($seats as $seat)
                         <tr>
                             <td>{{ $seat->id }}</td>
-                            <td>{{ $seat->stadiumPlan->stadium->name }}</td>
-                            <td>{{ $seat->stadiumPlan->name }}</td>
-                            <td>{{ $seat->seatType->name }}</td>
-                            <td>{{ $seat->status }}</td>
+                            <td>{{ $seat->stand->stadium->name ?? 'N/A' }}</td>
+                            <td>{{ $seat->stand->name ?? 'Sem Bancada' }}</td>
+                            <td>{{ $seat->stadiumPlan->id ?? 'Sem Planta' }}</td>
+                            <td>{{ chr(64 + $seat->row_number) }}</td> <!-- Número da Linha -->
+                            <td>{{ $seat->seat_number ?? 'N/A' }}</td> <!-- Número do Assento -->
+                            <td>{{ $seat->seatType->name ?? 'Sem Tipo' }}</td>
+                            <td>{{ $seat->status ?? 'Sem Status' }}</td>
                             <td>
                                 <a href="{{ route('seats.edit', $seat->id) }}" class="btn btn-warning">
                                     <i class="fas fa-edit"></i> Editar
@@ -36,7 +42,7 @@
                                 <form action="{{ route('seats.destroy', $seat->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja eliminar este lugar?')">
                                         <i class="fas fa-trash"></i> Eliminar
                                     </button>
                                 </form>
@@ -58,8 +64,10 @@
     $(document).ready(function() {
         $('#seatsTable').DataTable({
             responsive: true,
+            debug: true,
         });
     });
 </script>
 @endpush
+
 

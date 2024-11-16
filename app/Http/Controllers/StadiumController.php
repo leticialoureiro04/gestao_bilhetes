@@ -28,11 +28,13 @@ class StadiumController extends Controller
             'name' => 'required|max:255',
             'location' => 'required|max:255',
             'capacity' => 'required|integer',
+            'num_stands' => 'required|integer|min:1|max:4',
         ]);
 
-        Stadium::create($validatedData);
+        $stadium = Stadium::create($validatedData);
 
-        return redirect()->route('stadiums.index')->with('success', 'Estádio criado com sucesso.');
+        return redirect()->route('stands.configure', ['stadium_id' => $stadium->id])
+                     ->with('success', 'Estádio criado com sucesso. Configure as bancadas e os lugares.');
     }
 
     // Função para mostrar o formulário de edição de estádio
@@ -48,6 +50,7 @@ class StadiumController extends Controller
             'name' => 'required|max:255',
             'location' => 'required|max:255',
             'capacity' => 'required|integer',
+            'num_stands' => 'required|integer|min:1|max:4',
         ]);
 
         $stadium->update($validatedData);

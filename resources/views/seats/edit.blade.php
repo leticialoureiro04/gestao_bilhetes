@@ -15,9 +15,33 @@
                     <select class="form-control" id="stadium_plan_id" name="stadium_plan_id" required>
                         <option value="">Selecione a Planta</option>
                         @foreach($stadiumPlans as $plan)
-                            <option value="{{ $plan->id }}" {{ $seat->stadium_plan_id == $plan->id ? 'selected' : '' }}>{{ $plan->stadium->name }} - {{ $plan->name }}</option>
+                            <option value="{{ $plan->id }}" {{ $seat->stadium_plan_id == $plan->id ? 'selected' : '' }}>
+                                {{ $plan->stadium->name }} - {{ $plan->name }}
+                            </option>
                         @endforeach
                     </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="stand_id">Bancada</label>
+                    <select class="form-control" id="stand_id" name="stand_id" required>
+                        <option value="">Selecione a Bancada</option>
+                        @foreach($stands as $stand)
+                            <option value="{{ $stand->id }}" {{ $seat->stand_id == $stand->id ? 'selected' : '' }}>
+                                {{ $stand->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="row_number">Número da Linha</label>
+                    <input type="number" class="form-control" id="row_number" name="row_number" value="{{ $seat->row_number }}" placeholder="Introduza o número da linha" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="seat_number">Número do Assento</label>
+                    <input type="number" class="form-control" id="seat_number" name="seat_number" value="{{ $seat->seat_number }}" placeholder="Introduza o número do assento" required>
                 </div>
 
                 <div class="form-group">
@@ -25,7 +49,9 @@
                     <select class="form-control" id="seat_type_id" name="seat_type_id" required>
                         <option value="">Selecione o Tipo</option>
                         @foreach($seatTypes as $type)
-                            <option value="{{ $type->id }}" {{ $seat->seat_type_id == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
+                            <option value="{{ $type->id }}" {{ $seat->seat_type_id == $type->id ? 'selected' : '' }}>
+                                {{ $type->name }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
@@ -49,4 +75,5 @@
     </div>
 </div>
 @endsection
+
 

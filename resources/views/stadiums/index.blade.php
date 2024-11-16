@@ -20,6 +20,7 @@
                         <th>Nome</th>
                         <th>Localização</th>
                         <th>Capacidade</th>
+                        <th>Número de Bancadas</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -30,7 +31,11 @@
                             <td>{{ $stadium->name }}</td>
                             <td>{{ $stadium->location }}</td>
                             <td>{{ $stadium->capacity }}</td>
+                            <td>{{ $stadium->num_stands }}</td>
                             <td>
+                                <a href="{{ route('stands.show', $stadium->id) }}" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Visualizar Bancadas
+                                </a>
                                 <a href="{{ route('stadiums.edit', $stadium->id) }}" class="btn btn-warning btn-sm">
                                     <i class="fas fa-edit"></i> Editar
                                 </a>
@@ -64,6 +69,7 @@
     });
 </script>
 @endpush
+
 
 
 

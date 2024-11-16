@@ -11,6 +11,8 @@ use App\Http\Controllers\SeatController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\StandController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -87,3 +89,13 @@ Route::get('/stadium-plan/{id}', [StadiumPlanController::class, 'show'])->name('
 // Rota para configurar papéis e permissões (pode ser duplicada, verifique a necessidade)
 Route::get('/setup-roles-permissions', [SetupController::class, 'setupRolesAndPermissions']);
 
+
+Route::post('/language', [LanguageController::class, 'change'])->name('language.change');
+
+Route::get('/stands/configure/{stadium_id}', [StandController::class, 'configure'])->name('stands.configure');
+Route::post('/stands/store', [StandController::class, 'store'])->name('stands.store');
+Route::put('/stands/{stand}', [StandController::class, 'update'])->name('stands.update');
+Route::post('/stands/{stand}/seats', [StandController::class, 'storeSeats'])->name('stands.storeSeats');
+Route::get('/stadiums/{stadium_id}/stands', [StandController::class, 'show'])->name('stands.show');
+
+Route::get('/seats', [SeatController::class, 'index'])->name('seats.index');
