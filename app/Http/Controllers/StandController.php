@@ -115,6 +115,24 @@ class StandController extends Controller
 
     return view('stands.show', compact('stand'));
 }
+
+public function getSeats($standId)
+    {
+        // Busque os lugares associados à bancada pelo ID
+        $seats = Seat::where('stand_id', $standId)->get(['row_number', 'seat_number', 'status']);
+
+        // Retorne como JSON
+        return response()->json($seats);
+    }
+    public function view($standId)
+    {
+        // Buscar a bancada pelo ID e carregar os assentos associados
+        $stand = Stand::with('seats')->findOrFail($standId);
+
+        // Retornar a view com os dados da bancada e assentos
+        return view('stands.view', compact('stand'));
+    }
+
 }
 
 

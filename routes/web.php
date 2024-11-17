@@ -107,3 +107,10 @@ Route::get('/stands/{stand}', [StandController::class, 'showSeats'])->name('stan
 //Route::post('/stadiums/view/{id}', [StadiumController::class, 'view'])->name('stadiums.view');
 Route::get('/stadiums/view/{id}', [StadiumController::class, 'view'])->name('stadiums.view');
 Route::match(['get', 'post'], '/stadiums/{stadium}/view', [StadiumController::class, 'view'])->name('stadiums.view');
+Route::get('/stands/{stand}/seats', 'StandController@getSeats');
+
+Route::get('/stands/{stand}/seats', [StandController::class, 'getSeats']);
+
+Route::get('/stands/{stand}/view', [StandController::class, 'view'])->name('stands.view');
+Route::get('/stadiums/{id}/view', [StadiumController::class, 'view'])->name('stadiums.view');
+Route::get('/stadiums/{stadium}/view-layout', [StadiumController::class, 'viewLayout'])->name('stadiums.viewLayout');

@@ -16,7 +16,6 @@
             <table id="stadiumsTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Nome</th>
                         <th>Localização</th>
                         <th>Capacidade</th>
@@ -27,7 +26,6 @@
                 <tbody>
                     @foreach($stadiums as $stadium)
                         <tr>
-                            <td>{{ $stadium->id }}</td>
                             <td>{{ $stadium->name }}</td>
                             <td>{{ $stadium->location }}</td>
                             <td>{{ $stadium->capacity }}</td>
@@ -35,6 +33,9 @@
                             <td>
                                 <a href="{{ route('stands.show', $stadium->id) }}" class="btn btn-info btn-sm">
                                     <i class="fas fa-eye"></i> Visualizar Bancadas
+                                </a>
+                                <a href="{{ route('stadiums.viewLayout', $stadium->id) }}" class="btn btn-primary">
+                                    Visualizar Estádio
                                 </a>
                                 <a href="{{ route('stadiums.edit', $stadium->id) }}" class="btn btn-warning btn-sm">
                                     <i class="fas fa-edit"></i> Editar
