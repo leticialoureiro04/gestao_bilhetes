@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Stadium;
 use APP\Models\StadiumPlan;
+use App\Models\Stand;
+use App\Models\Seat;
 
 class StadiumController extends Controller
 {
@@ -81,4 +83,59 @@ class StadiumController extends Controller
         return response()->json($plans);
     }
 
+    public function view(Request $request, $stadium_id)
+{
+    // Obter o estádio pelo ID
+    $stadium = Stadium::findOrFail($stadium_id);
+
+    // Validar o input antes de salvar
+    $validated = $request->validate([
+        'stands.*.name' => 'required|string|max:255',
+        'stands.*.num_rows' => 'required|integer|min:1',
+        'stands.*.seats_per_row' => 'required|integer|min:1',
+        'stands.*.seat_types.1' => 'required|integer|min:0', // Lugares VIP
+        'stands.*.seat_types.2' => 'required|integer|min:0', // Lugares Normais
+    ]);
+
+    // Verificar se stands foram enviados
+    if (!is_array($validated['stands']) || empty($validated['stands'])) {
+        return redirect()->back()->withErrors('Nenhuma bancada foi enviada.');
+    }
+    // Salvar as bancadas
+    foreach ($validated['stands'] as $standData) {
+        $stand= Stand::updateOrCreate(
+            ['stadium_id' => $stadium->id, 'name' => $standData['name']],
+            [
+                'num_rows' => $standData['num_rows'],
+                'seats_per_row' => $standData['seats_per_row'],
+            ]
+        );
+    }
+    // Criar os lugares para cada bancada
+    for ($row = 1; $row <= $standData['num_rows']; $row++) {
+        for ($seat = 1; $seat <= $standData['seats_per_row']; $seat++) {
+            // Determinar o tipo de lugar (VIP ou Normal)
+            $seatTypeId = $seat <= $standData['seat_types'][1] ? 1 : 2; // 1: VIP, 2: Normal
+
+            Seat::updateOrCreate(
+                [
+                    'stand_id' => $stand->id,
+                    'row_number' => $row,
+                    'seat_number' => $seat,
+                ],
+                [
+                    'seat_type_id' => $seatTypeId, // Associar o tipo de lugar
+                    'status' => 'disponível', // Define o status como disponível por padrão
+                ]
+            );
+        }
+    }
+    // Recarregar o estádio com as bancadas associadas
+    $stadium->load('stands');
+
+    // Retornar a view com o layout do estádio
+    return view('stadiums.view', compact('stadium'));
 }
+
+}
+

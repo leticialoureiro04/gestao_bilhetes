@@ -99,3 +99,11 @@ Route::post('/stands/{stand}/seats', [StandController::class, 'storeSeats'])->na
 Route::get('/stadiums/{stadium_id}/stands', [StandController::class, 'show'])->name('stands.show');
 
 Route::get('/seats', [SeatController::class, 'index'])->name('seats.index');
+
+Route::get('/stadiums/{stadium}/view', [StadiumController::class, 'viewLayout'])->name('stadiums.view');
+Route::get('/stadiums/{stadium}/view', [StadiumController::class, 'view'])->name('stadiums.view');
+Route::post('/stadiums/{stadium}/view', [StadiumController::class, 'view'])->name('stadiums.view');
+Route::get('/stands/{stand}', [StandController::class, 'showSeats'])->name('stands.showSeats');
+//Route::post('/stadiums/view/{id}', [StadiumController::class, 'view'])->name('stadiums.view');
+Route::get('/stadiums/view/{id}', [StadiumController::class, 'view'])->name('stadiums.view');
+Route::match(['get', 'post'], '/stadiums/{stadium}/view', [StadiumController::class, 'view'])->name('stadiums.view');

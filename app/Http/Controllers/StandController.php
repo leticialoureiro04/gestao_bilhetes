@@ -24,6 +24,8 @@ class StandController extends Controller
     // Método para salvar as bancadas configuradas no banco de dados
     public function store(Request $request)
     {
+
+
         // Validação dos dados recebidos
         $request->validate([
             'stadium_id' => 'required|exists:stadiums,id',
@@ -48,11 +50,11 @@ class StandController extends Controller
             ]);
 
 
-            // Obter o plano do estádio (assumindo que está associado ao estádio)
+            /*// Obter o plano do estádio (assumindo que está associado ao estádio)
             $stadiumPlanId = $stand->stadium->stadium_plan_id ?? null;
             if (!$stadiumPlanId) {
                 return redirect()->back()->withErrors(['error' => 'Plano do estádio não encontrado para a bancada.']);
-            }
+            }*/
             // Geração automática de lugares
             $vipSeats = $standData['seat_types'][1] ?? 0; // Lugares VIP
             $normalSeats = $standData['seat_types'][2] ?? 0; // Lugares Normais
@@ -66,7 +68,7 @@ class StandController extends Controller
                     // Criar o assento
                     Seat::create([
                         'stand_id' => $stand->id,
-                        'stadium_plan_id' => $stadiumPlanId,
+                        /*'stadium_plan_id' => $stadiumPlanId,*/
                         'seat_type_id' => $seatType,
                         'row_number' => $row,
                         'seat_number' => $seatNumber,
@@ -106,6 +108,14 @@ class StandController extends Controller
 
         return redirect()->route('stands.show', $stand->stadium_id)->with('success', 'Configuração de lugares guardada com sucesso!');
     }
+
+    public function showSeats($stand_id)
+{
+    $stand = Stand::with('seats')->findOrFail($stand_id);
+
+    return view('stands.show', compact('stand'));
 }
+}
+
 
 

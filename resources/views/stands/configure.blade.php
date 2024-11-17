@@ -6,7 +6,7 @@
         <div class="card-header">
             <h3 class="card-title">Configurar Bancadas para {{ $stadium->name }}</h3>
         </div>
-        <form action="{{ route('stands.store') }}" method="POST">
+        <form action="{{ route('stadiums.view', $stadium->id) }}" method="POST">
             @csrf
             <input type="hidden" name="stadium_id" value="{{ $stadium->id }}">
 
@@ -41,11 +41,13 @@
             </div>
 
             <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Guardar Bancadas</button>
+                <!-- Salvar e visualizar o estádio -->
+                <button type="submit" class="btn btn-success ml-2">Visualizar Estádio</button>
             </div>
         </form>
     </div>
 </div>
 @endsection
+
 
 
