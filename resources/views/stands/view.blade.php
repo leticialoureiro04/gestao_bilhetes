@@ -23,6 +23,9 @@
                                     default => 'btn-secondary', // Cinza para outros
                                 },
                             };
+
+                            // Converter o número da linha para letra
+                            $rowLetter = chr(64 + $row);
                         @endphp
 
                         <!-- Renderizar o botão -->
@@ -31,7 +34,7 @@
                             data-seat-id="{{ $seat->id }}"
                             data-status="{{ $seat->status }}"
                             data-seat-type="{{ $seat->seat_type_id }}">
-                            {{ $seat->row_number }}-{{ $seat->seat_number }}
+                            {{ $rowLetter }}-{{ $seat->seat_number }}
                         </button>
                     @endforeach
                 </div>

@@ -31,7 +31,7 @@
                         <tr>
                             <td>{{ $ticket->id }}</td>
                             <td>{{ $ticket->game->stadium->name }} - {{ $ticket->game->date_time }}</td>
-                            <td>{{ $ticket->seat->id }}</td>
+                            <td>{{ chr(64 + $ticket->seat->row_number) }}-{{ $ticket->seat->seat_number }}</td>
                             <td>{{ $ticket->user->name }}</td>
                             <td>{{ $ticket->price }}</td>
                             <td>{{ $ticket->status }}</td>
