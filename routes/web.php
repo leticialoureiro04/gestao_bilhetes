@@ -48,7 +48,7 @@ Route::get('/stadium-plan/{id}/seats', [StadiumPlanController::class, 'viewSeats
 // Rotas de compra de bilhetes e listagem de bilhetes do usuário
 Route::middleware('auth')->group(function () {
     Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
-    Route::post('/buy-tickets', [TicketController::class, 'buyTickets'])->name('buy.tickets');
+    Route::post('/buy-tickets', [TicketController::class, 'buyTickets'])->name('tickets.buy');
 });
 
 // Rotas de estádios e plantas de estádio
@@ -114,3 +114,4 @@ Route::get('/stands/{stand}/seats', [StandController::class, 'getSeats']);
 Route::get('/stands/{stand}/view', [StandController::class, 'view'])->name('stands.view');
 Route::get('/stadiums/{id}/view', [StadiumController::class, 'view'])->name('stadiums.view');
 Route::get('/stadiums/{stadium}/view-layout', [StadiumController::class, 'viewLayout'])->name('stadiums.viewLayout');
+Route::post('/tickets/buy', [TicketController::class, 'buyTickets'])->name('tickets.buy');

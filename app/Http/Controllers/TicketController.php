@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers;
 
@@ -114,48 +114,61 @@ class TicketController extends Controller
     }
 
     public function buyTickets(Request $request)
-    {
-        $seatIds = $request->input('seats');
+{
+    $seatIds = json_decode($request->input('seat_ids'));
 
-        // Log para verificar o conteúdo de seatIds
-        Log::info('Seat IDs recebidos:', ['seatIds' => $seatIds]);
+    Log::info('IDs de assentos recebidos:', ['seatIds' => $seatIds]);
 
-        if (!$seatIds || count($seatIds) === 0) {
-            return response()->json(['message' => 'Nenhum lugar selecionado'], 400);
-        }
-
-        try {
-            $seats = Seat::whereIn('id', $seatIds)->where('status', 'disponível')->get();
-
-            if ($seats->count() != count($seatIds)) {
-                return response()->json(['message' => 'Alguns lugares já foram vendidos ou não existem'], 400);
-            }
-
-            foreach ($seats as $seat) {
-                $gameId = $seat->stadiumPlan->stadium->game->id ?? null;
-                if (is_null($gameId)) {
-                    Log::error('O game_id está ausente para o seat ID:', ['seat_id' => $seat->id]);
-                    return response()->json(['message' => 'Erro ao processar a compra: game_id ausente'], 500);
-                }
-
-                $price = $seat->seatType->price ?? 25;
-                Ticket::create([
-                    'game_id' => $gameId,
-                    'seat_id' => $seat->id,
-                    'user_id' => Auth::id(),
-                    'price' => $price,
-                    'status' => 'vendido',
-                ]);
-
-                $seat->update(['status' => 'vendido']);
-            }
-
-            return response()->json(['success' => true, 'message' => 'Compra realizada com sucesso!']);
-        } catch (\Exception $e) {
-            Log::error('Erro ao comprar bilhetes:', ['message' => $e->getMessage()]);
-            return response()->json(['message' => 'Erro interno ao processar a compra'], 500);
-        }
+    if (!$seatIds || count($seatIds) === 0) {
+        Log::warning('Nenhum lugar selecionado ou IDs inválidos.');
+        return response()->json(['message' => 'Nenhum lugar selecionado.'], 400);
     }
+
+    try {
+        $seats = Seat::whereIn('id', $seatIds)->where('status', 'disponível')->get();
+
+        Log::info('Lugares encontrados:', ['seats' => $seats]);
+
+        if ($seats->count() != count($seatIds)) {
+            Log::warning('Alguns lugares já foram vendidos ou não existem.');
+            return response()->json(['message' => 'Alguns lugares já foram vendidos ou não existem.'], 400);
+        }
+
+        foreach ($seats as $seat) {
+            if (is_null($seat->stadiumPlan)) {
+                Log::error('Erro: stadiumPlan não encontrado para o lugar.', ['seat_id' => $seat->id]);
+                return response()->json(['message' => 'Erro interno ao processar a compra.'], 500);
+            }
+
+            $game = Game::where('stadium_id', $seat->stadiumPlan->stadium_id)->first();
+
+            if (!$game) {
+                Log::error('Erro: Não foi possível encontrar o jogo associado ao estádio.', ['seat_id' => $seat->id]);
+                return response()->json(['message' => 'Erro ao encontrar o jogo para o estádio.'], 500);
+            }
+
+            Log::info('Jogo encontrado para o lugar:', ['game_id' => $game->id]);
+
+            Ticket::create([
+                'game_id' => $game->id,
+                'seat_id' => $seat->id,
+                'user_id' => Auth::id(),
+                'price' => $seat->seatType->price ?? 25,
+                'status' => 'vendido',
+            ]);
+
+            $seat->update(['status' => 'vendido']);
+        }
+
+        Log::info('Compra concluída com sucesso.');
+        return response()->json(['success' => true, 'message' => 'Compra realizada com sucesso!', 'redirect' => route('tickets.index')]);
+    } catch (\Exception $e) {
+        Log::error('Erro ao processar a compra de bilhetes:', ['message' => $e->getMessage()]);
+        return response()->json(['message' => 'Erro interno ao processar a compra.'], 500);
+    }
+}
+
+
 
     public function getAvailableSeats(Request $request)
     {
