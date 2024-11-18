@@ -41,9 +41,8 @@
                                             <i class="fas fa-trash"></i> Eliminar
                                         </button>
                                     </form>
-                                    <!-- Atualizado para usar a rota correta -->
-                                    <a href="{{ route('games.choose.plan', $game->id) }}" class="btn btn-primary btn-sm">
-                                        <i class="fas fa-ticket-alt"></i> Selecionar
+                                    <a href="{{ route('stadiums.viewLayout', $game->stadium->id) }}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-eye"></i> Visualizar Estádio
                                     </a>
                                 </div>
                             </td>
@@ -68,6 +67,7 @@
     });
 </script>
 @endpush
+
 
 
 
