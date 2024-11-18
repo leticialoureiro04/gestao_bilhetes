@@ -115,7 +115,10 @@ class TicketController extends Controller
 
     public function buyTickets(Request $request)
 {
-    $seatIds = json_decode($request->input('seat_ids'));
+    $seatIds = $request->input('seat_ids');
+    if (is_string($seatIds)) {
+        $seatIds = json_decode($seatIds, true); // Decodificar se for string JSON
+    }
 
     Log::info('IDs de assentos recebidos:', ['seatIds' => $seatIds]);
 
@@ -135,12 +138,14 @@ class TicketController extends Controller
         }
 
         foreach ($seats as $seat) {
-            if (is_null($seat->stadiumPlan)) {
-                Log::error('Erro: stadiumPlan não encontrado para o lugar.', ['seat_id' => $seat->id]);
+            // Use a tabela stands em vez de stadium_plans
+            $stand = $seat->stand;
+            if (!$stand) {
+                Log::error('Erro: Stand não encontrado para o lugar.', ['seat_id' => $seat->id]);
                 return response()->json(['message' => 'Erro interno ao processar a compra.'], 500);
             }
 
-            $game = Game::where('stadium_id', $seat->stadiumPlan->stadium_id)->first();
+            $game = Game::where('stadium_id', $stand->stadium_id)->first();
 
             if (!$game) {
                 Log::error('Erro: Não foi possível encontrar o jogo associado ao estádio.', ['seat_id' => $seat->id]);
