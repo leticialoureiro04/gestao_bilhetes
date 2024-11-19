@@ -14,6 +14,7 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\StandController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExportController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -117,3 +118,6 @@ Route::get('/stadiums/{id}/view', [StadiumController::class, 'view'])->name('sta
 Route::get('/stadiums/{stadium}/view-layout', [StadiumController::class, 'viewLayout'])->name('stadiums.viewLayout');
 Route::post('/tickets/buy', [TicketController::class, 'buyTickets'])->name('tickets.buy');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::post('/export-map', [ExportController::class, 'exportMap'])->name('export.map');
+Route::get('/relatorios', [App\Http\Controllers\ExportController::class, 'show'])->name('relatorios.index');
+Route::get('/export-map', [App\Http\Controllers\ExportController::class, 'exportMap'])->name('export.map');

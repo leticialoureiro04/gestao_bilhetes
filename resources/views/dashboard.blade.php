@@ -75,6 +75,20 @@
                     <a href="{{ route('tickets.index') }}" class="small-box-footer">{{ __('messages.Gerir Bilhetes') }} <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
+
+            <!-- Novo Card para Exportar Relatórios -->
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-primary">
+                    <div class="inner">
+                        <h3>Relatórios</h3>
+                        <p>Exportar</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-file-export"></i>
+                    </div>
+                    <a href="{{ route('relatorios.index') }}" class="small-box-footer">Gerar Relatórios <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
         </div>
 
         <!-- Gráficos -->
@@ -168,6 +182,8 @@
     }
 </script>
 @endpush
+
+
 
 
 
