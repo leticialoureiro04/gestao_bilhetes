@@ -13,6 +13,7 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\StandController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -115,3 +116,4 @@ Route::get('/stands/{stand}/view', [StandController::class, 'view'])->name('stan
 Route::get('/stadiums/{id}/view', [StadiumController::class, 'view'])->name('stadiums.view');
 Route::get('/stadiums/{stadium}/view-layout', [StadiumController::class, 'viewLayout'])->name('stadiums.viewLayout');
 Route::post('/tickets/buy', [TicketController::class, 'buyTickets'])->name('tickets.buy');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

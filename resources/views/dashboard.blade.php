@@ -3,110 +3,175 @@
 @section('title', __('Dashboard'))
 
 @section('content')
-    <div class="container-fluid">
-        <!-- Seleção de Idioma -->
-        <div class="d-flex justify-content-end mb-3">
-            <form action="{{ route('language.change') }}" method="POST">
-                @csrf
-                <select name="language" onchange="this.form.submit()" class="form-control" style="width: auto;">
-                    <option value="pt" {{ app()->getLocale() == 'pt' ? 'selected' : '' }}>Português</option>
-                    <option value="en" {{ app()->getLocale() == 'en' ? 'selected' : '' }}>English</option>
-                    <option value="es" {{ app()->getLocale() == 'es' ? 'selected' : '' }}>Español</option>
-                </select>
-            </form>
+<div class="container-fluid">
+    <!-- Seleção de Idioma -->
+    <div class="d-flex justify-content-end mb-3">
+        <form action="{{ route('language.change') }}" method="POST">
+            @csrf
+            <select name="language" onchange="this.form.submit()" class="form-control" style="width: auto;">
+                <option value="pt" {{ app()->getLocale() == 'pt' ? 'selected' : '' }}>Português</option>
+                <option value="en" {{ app()->getLocale() == 'en' ? 'selected' : '' }}>English</option>
+                <option value="es" {{ app()->getLocale() == 'es' ? 'selected' : '' }}>Español</option>
+            </select>
+        </form>
+    </div>
+
+    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        {{ __('messages.Dashboard') }}
+    </h2>
+
+    <!-- Dashboard para Administrador -->
+    @if(auth()->user()->hasRole('admin'))
+        <div class="row mt-4">
+            <!-- Card Estatísticas -->
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>150</h3>
+                        <p>{{ __('messages.Utilizadores') }}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <a href="{{ url('/users') }}" class="small-box-footer">{{ __('messages.Gerir Utilizadores') }} <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>53</h3>
+                        <p>{{ __('messages.Estádios') }}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <a href="{{ route('stadiums.index') }}" class="small-box-footer">{{ __('messages.Gerir Estádios') }} <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>44</h3>
+                        <p>{{ __('messages.Jogos') }}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-futbol"></i>
+                    </div>
+                    <a href="{{ route('games.index') }}" class="small-box-footer">{{ __('messages.Gerir Jogos') }} <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>65</h3>
+                        <p>{{ __('messages.Bilhetes') }}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <a href="{{ route('tickets.index') }}" class="small-box-footer">{{ __('messages.Gerir Bilhetes') }} <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
         </div>
 
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('messages.Dashboard') }}
-        </h2>
-
-        <!-- Dashboard para Administrador -->
-        @if(auth()->user()->hasRole('admin'))
-            <div class="row mt-4">
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3>150</h3>
-                            <p>{{ __('messages.Utilizadores') }}</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <a href="{{ url('/users') }}" class="small-box-footer">{{ __('messages.Gerir Utilizadores') }} <i class="fas fa-arrow-circle-right"></i></a>
+        <!-- Gráficos -->
+        <div class="row mt-4">
+            <!-- Gráfico de Vendas por Semana -->
+            <div class="col-lg-6">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Vendas por Semana</h3>
                     </div>
-                </div>
-
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3>53</h3>
-                            <p>{{ __('messages.Estádios') }}</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-building"></i>
-                        </div>
-                        <a href="{{ route('stadiums.index') }}" class="small-box-footer">{{ __('messages.Gerir Estádios') }} <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3>44</h3>
-                            <p>{{ __('messages.Jogos') }}</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-futbol"></i>
-                        </div>
-                        <a href="{{ route('games.index') }}" class="small-box-footer">{{ __('messages.Gerir Jogos') }} <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-danger">
-                        <div class="inner">
-                            <h3>65</h3>
-                            <p>{{ __('messages.Bilhetes') }}</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-ticket-alt"></i>
-                        </div>
-                        <a href="{{ route('tickets.index') }}" class="small-box-footer">{{ __('messages.Gerir Bilhetes') }} <i class="fas fa-arrow-circle-right"></i></a>
+                    <div class="card-body text-center">
+                        <canvas id="salesChart" style="height: 200px; max-width: 90%;"></canvas>
                     </div>
                 </div>
             </div>
-        @else
-            <!-- Dashboard simplificado para Cliente -->
-            <div class="row mt-4">
-                <div class="col-lg-6 col-12">
-                    <div class="small-box bg-primary" style="position: relative; overflow: hidden;">
-                        <div class="inner text-center py-3">
-                            <h4 class="font-weight-bold">{{ __('messages.Ver Bilhetes') }}</h4>
-                            <p>{{ __('messages.Aceda aos bilhetes disponíveis') }}</p>
-                        </div>
-                        <div class="icon" style="top: 50%; right: 15px; font-size: 2.5rem; transform: translateY(-50%); position: absolute; opacity: 0.15;">
-                            <i class="fas fa-ticket-alt"></i>
-                        </div>
-                        <a href="{{ route('tickets.index') }}" class="small-box-footer">{{ __('messages.Ver Bilhetes') }} <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
 
-                <div class="col-lg-6 col-12">
-                    <div class="small-box bg-success" style="position: relative; overflow: hidden;">
-                        <div class="inner text-center py-3">
-                            <h4 class="font-weight-bold">{{ __('messages.Comprar Bilhete') }}</h4>
-                            <p>{{ __('messages.Adquira novos bilhetes') }}</p>
-                        </div>
-                        <div class="icon" style="top: 50%; right: 15px; font-size: 2.5rem; transform: translateY(-50%); position: absolute; opacity: 0.15;">
-                            <i class="fas fa-shopping-cart"></i>
-                        </div>
-                        <a href="{{ route('tickets.create') }}" class="small-box-footer">{{ __('messages.Comprar Bilhete') }} <i class="fas fa-arrow-circle-right"></i></a>
+            <!-- Gráfico de Bilhetes por Tipo -->
+            <div class="col-lg-6">
+                <div class="card card-success">
+                    <div class="card-header">
+                        <h3 class="card-title">Bilhetes Vendidos por Tipo</h3>
+                    </div>
+                    <div class="card-body text-center">
+                        <canvas id="ticketsChart" style="height: 200px; max-width: 90%;"></canvas>
                     </div>
                 </div>
             </div>
-        @endif
-    </div>
+        </div>
+    @endif
+</div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Dados para os gráficos vindos do backend
+    const salesData = @json($sales->pluck('total'));
+    const salesLabels = @json($sales->pluck('week')->map(function ($week) {
+        return 'Semana ' . $week;
+    }));
+
+    const ticketsData = @json($ticketsByType->pluck('total'));
+    const ticketsLabels = @json($ticketsByType->pluck('type'));
+
+    // Gráfico de Vendas por Semana
+    if (document.getElementById('salesChart')) {
+        const salesChartContext = document.getElementById('salesChart').getContext('2d');
+        new Chart(salesChartContext, {
+            type: 'line',
+            data: {
+                labels: salesLabels,
+                datasets: [{
+                    label: 'Vendas',
+                    data: salesData,
+                    borderColor: 'rgba(60, 141, 188, 1)',
+                    backgroundColor: 'rgba(60, 141, 188, 0.5)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    // Gráfico de Bilhetes Vendidos por Tipo
+    if (document.getElementById('ticketsChart')) {
+        const ticketsChartContext = document.getElementById('ticketsChart').getContext('2d');
+        new Chart(ticketsChartContext, {
+            type: 'pie',
+            data: {
+                labels: ticketsLabels,
+                datasets: [{
+                    data: ticketsData,
+                    backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(255, 206, 86, 0.6)'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    }
+</script>
+@endpush
+
+
+
+
 
 
 
