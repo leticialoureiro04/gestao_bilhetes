@@ -121,3 +121,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::post('/export-map', [ExportController::class, 'exportMap'])->name('export.map');
 Route::get('/relatorios', [App\Http\Controllers\ExportController::class, 'show'])->name('relatorios.index');
 Route::get('/export-map', [App\Http\Controllers\ExportController::class, 'exportMap'])->name('export.map');
+
+
+Route::get('/test-gesfaturacao', function (App\Services\GesFaturacaoService $service) {
+    return $service->testConnection();
+});

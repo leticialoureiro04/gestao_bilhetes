@@ -12,6 +12,8 @@ use App\Models\Stadium;
 use App\Models\StadiumPlan;
 use App\Models\SeatType;
 use Illuminate\Support\Facades\Log;
+use App\Services\GesFaturacaoService;
+use App\Models\Invoice;
 
 class TicketController extends Controller
 {
@@ -113,7 +115,7 @@ class TicketController extends Controller
         return redirect()->route('tickets.index')->with('success', 'Bilhete cancelado com sucesso!');
     }
 
-    public function buyTickets(Request $request)
+    public function buyTickets(Request $request,GesFaturacaoService $gesFaturacaoService)
 {
     $seatIds = $request->input('seat_ids');
     if (is_string($seatIds)) {
@@ -154,7 +156,7 @@ class TicketController extends Controller
 
             Log::info('Jogo encontrado para o lugar:', ['game_id' => $game->id]);
 
-            Ticket::create([
+            $ticket =Ticket::create([
                 'game_id' => $game->id,
                 'seat_id' => $seat->id,
                 'user_id' => Auth::id(),
@@ -163,6 +165,29 @@ class TicketController extends Controller
             ]);
 
             $seat->update(['status' => 'vendido']);
+
+             // Criar a fatura no banco de dados
+            $invoice = Invoice::create([
+                'ticket_id' => $ticket->id, // Relacionar a fatura ao ticket
+                'total_amount' => $ticket->price,
+                'status' => 'pendente',
+            ]);
+
+            Log::info('Fatura criada localmente.', ['invoice_id' => $invoice->id]);
+
+            // Enviar a fatura para a API GesFaturação
+            $response = $gesFaturacaoService->createInvoice([
+                'ticket_id' => $invoice->ticket_id,
+                'total_amount' => $invoice->total_amount,
+                'status' => $invoice->status,
+            ]);
+
+            if (!$response['success']) {
+                Log::warning('Fatura criada localmente, mas não foi enviada para a API.', ['invoice_id' => $invoice->id]);
+                return response()->json(['message' => 'Erro ao enviar fatura para a API.'], 500);
+            }
+
+            Log::info('Fatura enviada com sucesso para a API.', ['invoice_id' => $invoice->id]);
         }
 
         Log::info('Compra concluída com sucesso.');

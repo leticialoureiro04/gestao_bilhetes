@@ -29,5 +29,11 @@ class Ticket extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    // Relação com o modelo Invoice para obter a fatura associada ao bilhete
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
 }
 
