@@ -13,8 +13,12 @@ class Invoice extends Model
     protected $fillable = [
         'ticket_id',
         'total_amount',
+        'saldo',
         'issue_date',
+        'expiration',
         'status',
+        'user_id',
+        'title',
     ];
 
     // Relacionamento com Tickets
@@ -26,7 +30,8 @@ class Invoice extends Model
     // Relacionamento com Users através do Ticket
     public function user()
     {
-        return $this->hasOneThrough(User::class, Ticket::class, 'id', 'id', 'ticket_id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
+
 }
 

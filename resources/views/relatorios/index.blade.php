@@ -34,5 +34,28 @@
             </form>
         </div>
     </div>
+
+    <script>
+        document.getElementById('stadium').addEventListener('change', function () {
+            const stadiumId = this.value;
+            const bancadaSelect = document.getElementById('bancada');
+
+            // Limpar opções existentes
+            bancadaSelect.innerHTML = '<option value="">Todas</option>';
+
+            if (stadiumId) {
+                fetch(`/bancadas/${stadiumId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        Object.entries(data).forEach(([id, name]) => {
+                            const option = document.createElement('option');
+                            option.value = id;
+                            option.textContent = name;
+                            bancadaSelect.appendChild(option);
+                        });
+                    });
+            }
+        });
+    </script>
 </div>
 @endsection

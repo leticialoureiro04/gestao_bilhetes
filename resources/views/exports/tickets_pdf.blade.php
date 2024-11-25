@@ -8,7 +8,6 @@
     <table border="1" cellspacing="0" cellpadding="5">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Estádio</th>
                 <th>Bancada</th>
                 <th>Assento</th>
@@ -19,15 +18,15 @@
         <tbody>
             @foreach ($tickets as $ticket)
                 <tr>
-                    <td>{{ $ticket->id }}</td>
-                    <td>{{ $ticket->stadium }}</td>
-                    <td>{{ $ticket->stand }}</td>
-                    <td>{{ $ticket->seat }}</td>
-                    <td>{{ $ticket->price }}</td>
-                    <td>{{ $ticket->created_at }}</td>
+                    <td>{{ $ticket->stadium }}</td> <!-- Nome do estádio -->
+                    <td>{{ $ticket->stand }}</td> <!-- Nome da bancada -->
+                    <td>{{ chr(64 + $ticket->row_number) . $ticket->seat_number }}</td> <!-- Assento (Fila + Número) -->
+                    <td>{{ number_format($ticket->price, 2, ',', '.') }}</td> <!-- Preço formatado -->
+                    <td>{{ \Carbon\Carbon::parse($ticket->created_at)->format('d/m/Y H:i:s') }}</td> <!-- Data formatada -->
                 </tr>
             @endforeach
         </tbody>
+
     </table>
 </body>
 </html>

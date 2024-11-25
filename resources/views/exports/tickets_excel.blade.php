@@ -1,7 +1,6 @@
 <table>
     <thead>
         <tr>
-            <th>ID</th>
             <th>Estádio</th>
             <th>Bancada</th>
             <th>Assento</th>
@@ -12,7 +11,6 @@
     <tbody>
         @foreach ($tickets as $ticket)
             <tr>
-                <td>{{ $ticket->id }}</td>
                 <td>{{ $ticket->stadium }}</td>
                 <td>{{ $ticket->stand }}</td>
                 <td>{{ $ticket->seat }}</td>

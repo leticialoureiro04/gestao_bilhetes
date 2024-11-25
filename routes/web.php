@@ -15,6 +15,9 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\StandController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\EmailTestController;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TestEmail;
 
 Route::get('/', function () {
     return view('welcome');
@@ -126,3 +129,12 @@ Route::get('/export-map', [App\Http\Controllers\ExportController::class, 'export
 Route::get('/test-gesfaturacao', function (App\Services\GesFaturacaoService $service) {
     return $service->testConnection();
 });
+
+
+// Página para exibir os filtros e opções de exportação
+Route::get('/relatorios', [ExportController::class, 'show'])->name('relatorios.index');
+
+// Rota para processar a exportação
+Route::post('/relatorios/export', [ExportController::class, 'exportMap'])->name('relatorios.export');
+
+Route::get('/bancadas/{stadium}', [ExportController::class, 'getBancadas']);

@@ -22,7 +22,7 @@ class TicketController extends Controller
         $user = Auth::user();
 
         if ($user->roles->contains('name', 'admin')) {
-            $tickets = Ticket::with(['game.stadium', 'seat.stadiumPlan', 'seat.seatType', 'user'])->get();
+            $tickets = Ticket::with(['game.stadium', 'seat.stadiumPlan', 'seat.seatType', 'user', 'invoice'])->get();
         } else {
             $tickets = Ticket::where('user_id', $user->id)
                              ->with(['game.stadium', 'seat.stadiumPlan', 'seat.seatType'])
@@ -54,12 +54,23 @@ class TicketController extends Controller
         $seat = Seat::findOrFail($request->seat_id);
         $price = $seat->seatType->price ?? 25;
 
-        Ticket::create([
+        $ticket =Ticket::create([
             'game_id' => $request->game_id,
             'seat_id' => $seat->id,
             'user_id' => Auth::id(),
             'price' => $price,
             'status' => 'vendido',
+        ]);
+
+        $invoice = Invoice::create([
+            'ticket_id' => $ticket->id,
+            'user_id' => Auth::id(),
+            'title' => 'Fatura para o jogo ' . $ticket->game_id,
+            'total_amount' => $price,
+            'saldo' => $price,
+            'issue_date' => now(),
+            'expiration' => now()->addDays(7),
+            'status' => 'pendente',
         ]);
 
         $seat->update(['status' => 'vendido']);
@@ -100,6 +111,15 @@ class TicketController extends Controller
             'status' => $request->status,
         ]);
 
+        $invoice = $ticket->invoice; // Obter a fatura associada
+        if ($invoice) {
+            $invoice->update([
+            'total_amount' => $request->price, // Atualize o valor total
+            'saldo' => $request->price, // Atualize o saldo
+            'status' => $request->status === 'vendido' ? 'pendente' : 'cancelada', // Atualizar status com base no ticket
+        ]);
+}
+
         return redirect()->route('tickets.index')->with('success', 'Bilhete atualizado com sucesso!');
     }
 
@@ -108,6 +128,12 @@ class TicketController extends Controller
         $seat = Seat::find($ticket->seat_id);
         if ($seat) {
             $seat->update(['status' => 'disponível']);
+        }
+
+        // Cancelar a fatura associada
+        $invoice = $ticket->invoice;
+        if ($invoice) {
+            $invoice->update(['status' => 'cancelada']);
         }
 
         $ticket->delete();
@@ -123,6 +149,7 @@ class TicketController extends Controller
     }
 
     Log::info('IDs de assentos recebidos:', ['seatIds' => $seatIds]);
+
 
     if (!$seatIds || count($seatIds) === 0) {
         Log::warning('Nenhum lugar selecionado ou IDs inválidos.');
@@ -167,13 +194,25 @@ class TicketController extends Controller
             $seat->update(['status' => 'vendido']);
 
              // Criar a fatura no banco de dados
-            $invoice = Invoice::create([
-                'ticket_id' => $ticket->id, // Relacionar a fatura ao ticket
+             $invoice = Invoice::create([
+                'ticket_id' => $ticket->id,
+                'user_id' => Auth::id(), // ID do usuário autenticado
+                'title' => 'Fatura para o jogo ' . $game->id, // Título descritivo
                 'total_amount' => $ticket->price,
+                'saldo' => $ticket->price, // Inicialmente, o saldo é igual ao valor total
+                'issue_date' => now(), // Data de emissão da fatura
+                'expiration' => now()->addDays(7), // Definir a data de vencimento como 7 dias a partir de hoje
                 'status' => 'pendente',
             ]);
 
             Log::info('Fatura criada localmente.', ['invoice_id' => $invoice->id]);
+
+            Log::error('Erro ao criar fatura no método buyTickets.', [
+                'ticket_id' => $ticket->id,
+                'seat_id' => $seat->id,
+                'user_id' => Auth::id(),
+            ]);
+
 
             // Enviar a fatura para a API GesFaturação
             $response = $gesFaturacaoService->createInvoice([
@@ -198,7 +237,43 @@ class TicketController extends Controller
     }
 }
 
+private function sendInvoiceToGesFaturacao($invoice)
+{
+    $url = 'https://dev.gesfaturacao.pt/api/invoices'; // Endpoint da API
 
+    $data = [
+        'ticket_id' => $invoice->ticket_id,
+        'total_amount' => $invoice->total_amount,
+        'status' => $invoice->status,
+    ];
+
+    // Iniciar cURL
+    $ch = curl_init();
+
+    curl_setopt_array($ch, [
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => json_encode($data),
+        CURLOPT_HTTPHEADER => [
+            'Authorization: Bearer ' . env('GESFATURACAO_TOKEN'), // Certifique-se de que o token é válido
+            'Content-Type: application/json',
+        ],
+    ]);
+
+    // Executar cURL
+    $response = curl_exec($ch);
+
+    // Fechar a sessão cURL
+    curl_close($ch);
+
+    // Verificar se a requisição foi bem-sucedida
+    if ($response) {
+        return ['success' => true, 'data' => json_decode($response)];
+    }
+
+    return ['success' => false, 'message' => 'Erro ao enviar fatura para a API.'];
+}
 
     public function getAvailableSeats(Request $request)
     {

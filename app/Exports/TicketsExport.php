@@ -28,13 +28,13 @@ class TicketsExport implements FromQuery, WithHeadings, WithMapping
             ->join('seats', 'tickets.seat_id', '=', 'seats.id')
             ->join('stands', 'seats.stand_id', '=', 'stands.id')
             ->join('stadiums', 'stands.stadium_id', '=', 'stadiums.id')
-            ->select(
-                'tickets.created_at',
-                'stadiums.name as stadium',
-                'stands.name as stand',
-                'seats.row_number',
-                'seats.seat_number',
-                'tickets.price'
+            ->select('tickets.id', // Inclui o ID do bilhete
+            'stadiums.name as stadium',
+            'stands.name as stand',
+            'seats.row_number',
+            'seats.seat_number',
+            'tickets.price',
+            'tickets.created_at'
             );
 
         if (!empty($this->stadiumId)) {
@@ -51,24 +51,24 @@ class TicketsExport implements FromQuery, WithHeadings, WithMapping
     public function headings(): array
     {
         return [
-            'Data',
             'Estádio',
             'Bancada',
             'Fila',
             'Assento',
             'Preço',
+            'Data',
         ];
     }
 
     public function map($ticket): array
     {
         return [
-            $ticket->created_at->format('d/m/Y'),
             $ticket->stadium,
             $ticket->stand,
-            chr(64 + $ticket->row_number),
-            $ticket->seat_number,
+            chr(64 + $ticket->row_number), // Converte a fila para letras (ex.: 1 -> A)
+            $ticket->seat_number, // Número do assento
             number_format($ticket->price, 2, ',', '.'),
+            $ticket->created_at->format('d/m/Y H:i:s'),
         ];
     }
 }

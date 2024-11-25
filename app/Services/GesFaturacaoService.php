@@ -15,7 +15,7 @@ class GesFaturacaoService
         // Carrega as variáveis do .env
         $this->baseUrl = 'https://devipvc.gesfaturacao.pt/api'; // Teste com a URL diretamente
 
-        $this->token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjo5LCJ1c2VybmFtZSI6ImlwdmMiLCJjcmVhdGVkIjoiMjAyNC0xMS0yMSAwOTo0OTo0NyJ9.jV6xan1y1xpdqVfWxrEb1ToXVbzQpuOU0_ADUyqbPSQ';
+        $this->token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjo5LCJ1c2VybmFtZSI6ImlwdmMiLCJjcmVhdGVkIjoiMjAyNC0xMS0yMSAxNzoyOTowNyJ9.I7X5k1vLCsOlv4SbphuvxH0Wb4BVyBv_9FPyPqmQzcM';
 
     }
 
