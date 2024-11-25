@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="container">
-    <h1>Lugares da Bancada: {{ $stand->name }}</h1>
-    <p>Linhas: {{ $stand->num_rows }}</p>
-    <p>Assentos por linha: {{ $stand->seats_per_row }}</p>
+    <h1>Stand Seats: {{ $stand->name }}</h1>
+    <p>Lines: {{ $stand->num_rows }}</p>
+    <p>Seats per Row: {{ $stand->seats_per_row }}</p>
 
     @if ($stand->seats->isEmpty())
-        <p>Nenhum lugar disponível para esta bancada.</p>
+        <p>No space available for this stand.</p>
     @else
         <div class="seats-layout">
             @for ($row = 1; $row <= $stand->num_rows; $row++)
@@ -45,7 +45,7 @@
         <form id="purchaseForm">
             @csrf
             <input type="hidden" name="seat_ids" id="selectedSeats" value="">
-            <button id="confirmPurchase" class="btn btn-primary mt-3" disabled>Comprar Lugares</button>
+            <button id="confirmPurchase" class="btn btn-primary mt-3" disabled>Buy Seats</button>
         </form>
     @endif
 </div>
@@ -117,7 +117,7 @@ document.getElementById('confirmPurchase').addEventListener('click', function (e
     const seatIds = JSON.parse(document.getElementById('selectedSeats').value);
 
     if (seatIds.length === 0) {
-        alert('Selecione pelo menos um lugar.');
+        alert('Select at least one seat.');
         return;
     }
 
@@ -144,12 +144,12 @@ document.getElementById('confirmPurchase').addEventListener('click', function (e
 
             window.location.href = data.redirect;
         } else {
-            alert(data.message || 'Erro ao processar a compra.');
+            alert(data.message || 'Error processing the purchase.');
         }
     })
     .catch(error => {
-        console.error('Erro ao processar a compra:', error);
-        alert('Erro interno ao processar a compra.');
+        console.error('Error processing the purchase.', error);
+        alert('Internal error processing the purchase.');
     });
 });
 </script>

@@ -1,11 +1,11 @@
 <table>
     <thead>
         <tr>
-            <th>Estádio</th>
-            <th>Bancada</th>
-            <th>Assento</th>
-            <th>Preço</th>
-            <th>Data de Criação</th>
+            <th>Stadium</th>
+            <th>Stand</th>
+            <th>Seat</th>
+            <th>Price</th>
+            <th>Creation Date</th>
         </tr>
     </thead>
     <tbody>

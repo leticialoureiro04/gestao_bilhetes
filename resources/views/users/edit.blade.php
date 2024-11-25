@@ -4,7 +4,7 @@
 <div class="container">
     <div class="card card-warning">
         <div class="card-header">
-            <h3 class="card-title">Editar Utilizador</h3>
+            <h3 class="card-title">Edit User</h3>
         </div>
         <!-- /.card-header -->
         <!-- form start -->
@@ -13,7 +13,7 @@
             @method('PUT')
             <div class="card-body">
                 <div class="form-group">
-                    <label for="name">Nome</label>
+                    <label for="name">Name</label>
                     <input type="text" class="form-control" name="name" id="name" value="{{ $user->name }}" required>
                 </div>
                 <div class="form-group">
@@ -25,9 +25,9 @@
 
             <div class="card-footer">
                 <a href="{{ route('users.index') }}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Voltar
+                    <i class="fas fa-arrow-left"></i> Come back
                 </a>
-                <button type="submit" class="btn btn-warning">Atualizar Utilizador</button>
+                <button type="submit" class="btn btn-warning">Update User</button>
             </div>
         </form>
     </div>

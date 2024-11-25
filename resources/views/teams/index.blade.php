@@ -3,9 +3,9 @@
 <div class="container">
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Lista de Equipas</h3>
+            <h3 class="card-title">Team List</h3>
             <a href="{{ route('teams.create') }}" class="btn btn-primary float-right">
-                <i class="fas fa-plus"></i> Adicionar Equipa
+                <i class="fas fa-plus"></i> Add Team
             </a>
         </div>
         <div class="card-body">
@@ -13,10 +13,10 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Nome</th>
-                        <th>Cidade</th>
-                        <th>Fundação</th>
-                        <th>Ações</th>
+                        <th>Name</th>
+                        <th>City</th>
+                        <th>Foundation</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -28,13 +28,13 @@
                             <td>{{ $team->founded }}</td>
                             <td>
                                 <a href="{{ route('teams.edit', $team->id) }}" class="btn btn-warning btn-sm">
-                                    <i class="fas fa-edit"></i> Editar
+                                    <i class="fas fa-edit"></i> Edit
                                 </a>
                                 <form action="{{ route('teams.destroy', $team->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja eliminar esta equipa?')">
-                                        <i class="fas fa-trash"></i> Eliminar
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this team?')">
+                                        <i class="fas fa-trash"></i> Delete
                                     </button>
                                 </form>
                             </td>
@@ -43,7 +43,7 @@
                 </tbody>
             </table>
             <div class="mt-3">
-                <p class="text-muted">Total de equipas: {{ $teams->count() }}</p>
+                <p class="text-muted">Total Teams: {{ $teams->count() }}</p>
             </div>
         </div>
     </div>
@@ -54,9 +54,6 @@
     $(document).ready(function() {
         $('#teamsTable').DataTable({
             responsive: true,
-            language: {
-                url: "https://cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese.json"
-            }
         });
     });
 </script>

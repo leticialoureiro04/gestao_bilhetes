@@ -37,49 +37,49 @@
                     <li class="nav-item has-treeview">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-cog"></i>
-                            <p>Administração</p>
+                            <p>Administration</p>
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
                                 <a href="{{ url('/users') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Gerir Utilizadores</p>
+                                    <p>Manage Users</p>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <!--<li class="nav-item">
                                 <a href="{{ route('stadium_plans.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Gerir Plantas de Estádio</p>
                                 </a>
-                            </li>
+                            </li>-->
                             <li class="nav-item">
                                 <a href="{{ route('seat_types.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Gerir Tipos de Lugares</p>
+                                    <p>Manage Seat Types</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('seats.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Gerir Lugares</p>
+                                    <p>Manage Seats</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('roles.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Lista de Roles</p>
+                                    <p>Role List</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('teams.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Gerir Equipas</p>
+                                    <p>Manage Teams</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('games.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Gerir Jogos</p>
+                                    <p>Manage Games</p>
                                 </a>
                             </li>
                         </ul>
@@ -90,7 +90,7 @@
                 <li class="nav-item">
                     <a href="{{ route('tickets.index') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Gerir Bilhetes</p>
+                        <p>Manage Tickets</p>
                     </a>
                 </li>
             </ul>

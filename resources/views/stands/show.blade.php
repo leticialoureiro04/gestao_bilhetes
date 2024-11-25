@@ -2,22 +2,22 @@
 
 @section('content')
 <div class="container">
-    <h2>Bancadas do Estádio: {{ $stadium->name }}</h2>
+    <h2>Stadium Stands: {{ $stadium->name }}</h2>
 
     @foreach($stadium->stands as $stand)
         <div class="card my-4">
             <div class="card-header">
-                <h4>Bancada: {{ $stand->name }}</h4>
+                <h4>Stand: {{ $stand->name }}</h4>
             </div>
             <div class="card-body">
-                <p><strong>Número de Filas:</strong> {{ $stand->num_rows }}</p>
-                <p><strong>Lugares por Fila:</strong> {{ $stand->seats_per_row }}</p>
-                <p><strong>Total de Assentos:</strong> {{ $stand->num_rows * $stand->seats_per_row }}</p>
+                <p><strong>Number of Lines:</strong> {{ $stand->num_rows }}</p>
+                <p><strong>Seats per Row:</strong> {{ $stand->seats_per_row }}</p>
+                <p><strong>Total Seats:</strong> {{ $stand->num_rows * $stand->seats_per_row }}</p>
             </div>
         </div>
     @endforeach
 
-    <a href="{{ route('stadiums.index') }}" class="btn btn-secondary">Voltar à Lista de Estádios</a>
+    <a href="{{ route('stadiums.index') }}" class="btn btn-secondary">Back to Stadium List</a>
 </div>
 @endsection
 

@@ -11,13 +11,12 @@
             <select name="language" onchange="this.form.submit()" class="form-control" style="width: auto;">
                 <option value="pt" {{ app()->getLocale() == 'pt' ? 'selected' : '' }}>Português</option>
                 <option value="en" {{ app()->getLocale() == 'en' ? 'selected' : '' }}>English</option>
-                <option value="es" {{ app()->getLocale() == 'es' ? 'selected' : '' }}>Español</option>
             </select>
         </form>
     </div>
 
     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        {{ __('messages.Dashboard') }}
+        {{ __('Dashboard') }}
     </h2>
 
     <!-- Dashboard para Administrador -->
@@ -28,12 +27,12 @@
                 <div class="small-box bg-info">
                     <div class="inner">
                         <h3>150</h3>
-                        <p>{{ __('messages.Utilizadores') }}</p>
+                        <p>{{ ('Users') }}</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <a href="{{ url('/users') }}" class="small-box-footer">{{ __('messages.Gerir Utilizadores') }} <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ url('/users') }}" class="small-box-footer">{{ __('Manage Users') }} <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 
@@ -41,12 +40,12 @@
                 <div class="small-box bg-success">
                     <div class="inner">
                         <h3>53</h3>
-                        <p>{{ __('messages.Estádios') }}</p>
+                        <p>{{ __('Stadiums') }}</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-building"></i>
                     </div>
-                    <a href="{{ route('stadiums.index') }}" class="small-box-footer">{{ __('messages.Gerir Estádios') }} <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('stadiums.index') }}" class="small-box-footer">{{ __('Manage Stadiums') }} <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 
@@ -54,12 +53,12 @@
                 <div class="small-box bg-warning">
                     <div class="inner">
                         <h3>44</h3>
-                        <p>{{ __('messages.Jogos') }}</p>
+                        <p>{{ __('Games') }}</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-futbol"></i>
                     </div>
-                    <a href="{{ route('games.index') }}" class="small-box-footer">{{ __('messages.Gerir Jogos') }} <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('games.index') }}" class="small-box-footer">{{ __('Manage Games') }} <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 
@@ -67,12 +66,12 @@
                 <div class="small-box bg-danger">
                     <div class="inner">
                         <h3>65</h3>
-                        <p>{{ __('messages.Bilhetes') }}</p>
+                        <p>{{ __('Tickets') }}</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-ticket-alt"></i>
                     </div>
-                    <a href="{{ route('tickets.index') }}" class="small-box-footer">{{ __('messages.Gerir Bilhetes') }} <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('tickets.index') }}" class="small-box-footer">{{ __('Manage Tickets') }} <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 
@@ -80,13 +79,13 @@
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-primary">
                     <div class="inner">
-                        <h3>Relatórios</h3>
-                        <p>Exportar</p>
+                        <h3>Reporting</h3>
+                        <p>Export</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-file-export"></i>
                     </div>
-                    <a href="{{ route('relatorios.index') }}" class="small-box-footer">Gerar Relatórios <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('relatorios.index') }}" class="small-box-footer">Generate Reports <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
         </div>
@@ -97,7 +96,7 @@
             <div class="col-lg-6">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Vendas por Semana</h3>
+                        <h3 class="card-title">Sales per Week</h3>
                     </div>
                     <div class="card-body text-center">
                         <canvas id="salesChart" style="height: 200px; max-width: 90%;"></canvas>
@@ -109,7 +108,7 @@
             <div class="col-lg-6">
                 <div class="card card-success">
                     <div class="card-header">
-                        <h3 class="card-title">Bilhetes Vendidos por Tipo</h3>
+                        <h3 class="card-title">Tickets Sold by Type</h3>
                     </div>
                     <div class="card-body text-center">
                         <canvas id="ticketsChart" style="height: 200px; max-width: 90%;"></canvas>

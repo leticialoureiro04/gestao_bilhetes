@@ -2,63 +2,63 @@
 
 @section('content')
 <div class="container">
-    <h1 class="text-center">Visualização do Estádio: {{ $stadium->name }}</h1>
+    <h1 class="text-center">Stadium View: {{ $stadium->name }}</h1>
     <div class="stadium-layout">
         <!-- Bancada Norte -->
         <div class="stand north">
-            <h3 class="text-white">Bancada Norte</h3>
+            <h3 class="text-white">North Stand</h3>
             @php $north = $stadium->stands->where('name', 'Bancada Norte')->first(); @endphp
             @if ($north)
-                <p class="text-white">Linhas: {{ $north->num_rows }}</p>
-                <p class="text-white">Assentos por linha: {{ $north->seats_per_row }}</p>
-                <a href="{{ route('stands.view', $north->id) }}" class="btn btn-light btn-sm mt-2">Ver Lugares</a>
+                <p class="text-white">Lines: {{ $north->num_rows }}</p>
+                <p class="text-white">Seats per Row: {{ $north->seats_per_row }}</p>
+                <a href="{{ route('stands.view', $north->id) }}" class="btn btn-light btn-sm mt-2">View Seats</a>
             @else
-                <p class="text-white">Sem informações</p>
+                <p class="text-white">No information</p>
             @endif
         </div>
 
         <!-- Bancada Nascente -->
         <div class="stand east">
-            <h3 class="text-white">Bancada Nascente</h3>
+            <h3 class="text-white">East Stand </h3>
             @php $east = $stadium->stands->where('name', 'Bancada Nascente')->first(); @endphp
             @if ($east)
-                <p class="text-white">Linhas: {{ $east->num_rows }}</p>
-                <p class="text-white">Assentos por linha: {{ $east->seats_per_row }}</p>
-                <a href="{{ route('stands.view', $east->id) }}" class="btn btn-light btn-sm mt-2">Ver Lugares</a>
+                <p class="text-white">Lines: {{ $east->num_rows }}</p>
+                <p class="text-white">Seats per Row: {{ $east->seats_per_row }}</p>
+                <a href="{{ route('stands.view', $east->id) }}" class="btn btn-light btn-sm mt-2">View Seats</a>
             @else
-                <p class="text-white">Sem informações</p>
+                <p class="text-white">No information</p>
             @endif
         </div>
 
         <!-- Bancada Sul -->
         <div class="stand south">
-            <h3 class="text-white">Bancada Sul</h3>
+            <h3 class="text-white">South Stand</h3>
             @php $south = $stadium->stands->where('name', 'Bancada Sul')->first(); @endphp
             @if ($south)
-                <p class="text-white">Linhas: {{ $south->num_rows }}</p>
-                <p class="text-white">Assentos por linha: {{ $south->seats_per_row }}</p>
-                <a href="{{ route('stands.view', $south->id) }}" class="btn btn-light btn-sm mt-2">Ver Lugares</a>
+                <p class="text-white">Lines: {{ $south->num_rows }}</p>
+                <p class="text-white">Seats per Row: {{ $south->seats_per_row }}</p>
+                <a href="{{ route('stands.view', $south->id) }}" class="btn btn-light btn-sm mt-2">View Seats</a>
             @else
-                <p class="text-white">Sem informações</p>
+                <p class="text-white">No information</p>
             @endif
         </div>
 
         <!-- Bancada Poente -->
         <div class="stand west">
-            <h3 class="text-white">Bancada Poente</h3>
+            <h3 class="text-white">West Stand</h3>
             @php $west = $stadium->stands->where('name', 'Bancada Poente')->first(); @endphp
             @if ($west)
-                <p class="text-white">Linhas: {{ $west->num_rows }}</p>
-                <p class="text-white">Assentos por linha: {{ $west->seats_per_row }}</p>
-                <a href="{{ route('stands.view', $west->id) }}" class="btn btn-light btn-sm mt-2">Ver Lugares</a>
+                <p class="text-white">Lines: {{ $west->num_rows }}</p>
+                <p class="text-white">Seats per Row: {{ $west->seats_per_row }}</p>
+                <a href="{{ route('stands.view', $west->id) }}" class="btn btn-light btn-sm mt-2">View Seats</a>
             @else
-                <p class="text-white">Sem informações</p>
+                <p class="text-white">No information</p>
             @endif
         </div>
 
         <!-- Campo -->
         <div class="field">
-            <h3>Campo</h3>
+            <h3>Field</h3>
         </div>
     </div>
 </div>

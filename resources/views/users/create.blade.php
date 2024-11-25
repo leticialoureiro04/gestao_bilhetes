@@ -4,7 +4,7 @@
 <div class="container">
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Adicionar Utilizador</h3>
+            <h3 class="card-title">Add User</h3>
         </div>
         <!-- /.card-header -->
         <!-- form start -->
@@ -12,25 +12,25 @@
             @csrf
             <div class="card-body">
                 <div class="form-group">
-                    <label for="name">Nome</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Introduza o nome" required>
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter your name" required>
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" class="form-control" name="email" id="email" placeholder="Introduza o email" required>
+                    <input type="email" class="form-control" name="email" id="email" placeholder="Enter your email" required>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" placeholder="Introduza a password" required>
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required>
                 </div>
             </div>
             <!-- /.card-body -->
 
             <div class="card-footer">
                 <a href="{{ route('users.index') }}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Voltar
+                    <i class="fas fa-arrow-left"></i> Come back
                 </a>
-                <button type="submit" class="btn btn-primary">Criar Utilizador</button>
+                <button type="submit" class="btn btn-primary">Create User</button>
             </div>
         </form>
     </div>

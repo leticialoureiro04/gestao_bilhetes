@@ -4,13 +4,13 @@
 <div class="container">
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Criar Novo Jogo</h3>
+            <h3 class="card-title">Crrate New Game</h3>
         </div>
         <form action="{{ route('games.store') }}" method="POST">
             @csrf
             <div class="card-body">
                 <div class="form-group">
-                    <label for="stadium_id">Estádio</label>
+                    <label for="stadium_id">Stadium</label>
                     <select name="stadium_id" id="stadium_id" class="form-control" required>
                         @foreach($stadiums as $stadium)
                             <option value="{{ $stadium->id }}">{{ $stadium->name }}</option>
@@ -22,7 +22,7 @@
                     <input type="datetime-local" class="form-control" id="date_time" name="date_time" required>
                 </div>
                 <div class="form-group">
-                    <label for="home_team">Equipa da Casa</label>
+                    <label for="home_team">Home Team</label>
                     <select name="teams[home]" id="home_team" class="form-control" required>
                         @foreach($teams as $team)
                             <option value="{{ $team->id }}">{{ $team->name }}</option>
@@ -30,7 +30,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="away_team">Equipa Visitante</label>
+                    <label for="away_team">Visiting Team</label>
                     <select name="teams[away]" id="away_team" class="form-control" required>
                         @foreach($teams as $team)
                             <option value="{{ $team->id }}">{{ $team->name }}</option>
@@ -40,10 +40,10 @@
             </div>
             <div class="card-footer">
                 <a href="{{ route('games.index') }}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Voltar
+                    <i class="fas fa-arrow-left"></i> Come back
                 </a>
                 <button type="submit" class="btn btn-primary">
-                    Criar Jogo
+                    Create Game
                 </button>
             </div>
         </form>

@@ -4,15 +4,15 @@
 <div class="container">
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Emitir Bilhete</h3>
+            <h3 class="card-title">Issue Ticket</h3>
         </div>
         <form action="{{ route('tickets.store') }}" method="POST">
             @csrf
             <div class="card-body">
                 <div class="form-group">
-                    <label for="game_id">Jogo</label>
+                    <label for="game_id">Game</label>
                     <select name="game_id" id="game_id" class="form-control" required>
-                        <option value="">Selecione um jogo</option>
+                        <option value="">Select a game</option>
                         @foreach($games as $game)
                             <option value="{{ $game->id }}" data-stadium="{{ $game->stadium->name }}" data-stadium-id="{{ $game->stadium_id }}">
                                 {{ $game->date_time }} - {{ $game->stadium->name }}
@@ -21,41 +21,41 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="stadium">Estádio</label>
+                    <label for="stadium">Stadium</label>
                     <input type="text" id="stadium" name="stadium" class="form-control" readonly>
                     <input type="hidden" name="stadium_id" id="stadium_id">
                 </div>
                 <div class="form-group">
-                    <label for="stadium_plan_id">Planta do Estádio</label>
+                    <label for="stadium_plan_id">Stadium Plan</label>
                     <select name="stadium_plan_id" id="stadium_plan_id" class="form-control" required>
-                        <option value="">Selecione a planta do estádio</option>
+                        <option value="">Select the stadium plan</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="seat_type_id">Tipo de Lugar</label>
+                    <label for="seat_type_id">Type of Place</label>
                     <select name="seat_type_id" id="seat_type_id" class="form-control" required>
-                        <option value="">Selecione o tipo de lugar</option>
+                        <option value="">Select the type of place</option>
                         @foreach($seatTypes as $seatType)
                             <option value="{{ $seatType->id }}" data-price="{{ $seatType->price }}">{{ $seatType->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="seat_id">Lugar</label>
+                    <label for="seat_id">Place</label>
                     <select name="seat_id" id="seat_id" class="form-control" required>
-                        <option value="">Selecione um lugar</option>
+                        <option value="">Select a place</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="price">Preço</label>
+                    <label for="price">Price</label>
                     <input type="number" step="0.01" class="form-control" id="price" name="price" readonly>
                 </div>
             </div>
             <div class="card-footer">
                 <a href="{{ route('tickets.index') }}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Voltar
+                    <i class="fas fa-arrow-left"></i> Come back
                 </a>
-                <button type="submit" class="btn btn-primary">Emitir Bilhete</button>
+                <button type="submit" class="btn btn-primary">Issue Ticket</button>
             </div>
         </form>
     </div>

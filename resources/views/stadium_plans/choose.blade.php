@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h3>Escolher Planta para o Jogo</h3>
+    <h3>Choose Plant for the Game</h3>
     <ul>
         @foreach($stadiumPlans as $plan)
             <li>

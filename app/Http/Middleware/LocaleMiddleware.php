@@ -10,13 +10,15 @@ class LocaleMiddleware
 {
     public function handle($request, Closure $next)
     {
-        // Use o valor da sessão 'locale' ou o padrão configurado
+        // Usa o idioma salvo na sessão ou o idioma padrão
         $locale = Session::get('locale', config('app.locale'));
-        App::setLocale($locale);
+        App::setLocale($locale); // Define o idioma da aplicação
 
         return $next($request);
     }
 }
+
+
 
 
 

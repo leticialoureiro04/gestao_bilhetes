@@ -4,13 +4,13 @@
 <div class="container">
     <div class="card card-warning">
         <div class="card-header">
-            <h3 class="card-title">Editar Lugar</h3>
+            <h3 class="card-title">Edit Seat</h3>
         </div>
         <form action="{{ route('seats.update', $seat->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="card-body">
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label for="stadium_plan_id">Planta do Estádio</label>
                     <select class="form-control" id="stadium_plan_id" name="stadium_plan_id" required>
                         <option value="">Selecione a Planta</option>
@@ -20,12 +20,12 @@
                             </option>
                         @endforeach
                     </select>
-                </div>
+                </div>-->
 
                 <div class="form-group">
-                    <label for="stand_id">Bancada</label>
+                    <label for="stand_id">Stand</label>
                     <select class="form-control" id="stand_id" name="stand_id" required>
-                        <option value="">Selecione a Bancada</option>
+                        <option value="">Select the Stand</option>
                         @foreach($stands as $stand)
                             <option value="{{ $stand->id }}" {{ $seat->stand_id == $stand->id ? 'selected' : '' }}>
                                 {{ $stand->name }}
@@ -35,19 +35,19 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="row_number">Número da Linha</label>
-                    <input type="number" class="form-control" id="row_number" name="row_number" value="{{ $seat->row_number }}" placeholder="Introduza o número da linha" required>
+                    <label for="row_number">Line Number</label>
+                    <input type="number" class="form-control" id="row_number" name="row_number" value="{{ $seat->row_number }}" placeholder="Enter a line number" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="seat_number">Número do Assento</label>
-                    <input type="number" class="form-control" id="seat_number" name="seat_number" value="{{ $seat->seat_number }}" placeholder="Introduza o número do assento" required>
+                    <label for="seat_number">Seat Number</label>
+                    <input type="number" class="form-control" id="seat_number" name="seat_number" value="{{ $seat->seat_number }}" placeholder="Enter a seat number" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="seat_type_id">Tipo de Lugar</label>
+                    <label for="seat_type_id">Type of Seat</label>
                     <select class="form-control" id="seat_type_id" name="seat_type_id" required>
-                        <option value="">Selecione o Tipo</option>
+                        <option value="">Select the type of seat</option>
                         @foreach($seatTypes as $type)
                             <option value="{{ $type->id }}" {{ $seat->seat_type_id == $type->id ? 'selected' : '' }}>
                                 {{ $type->name }}
@@ -67,9 +67,9 @@
             </div>
             <div class="card-footer">
                 <a href="{{ route('seats.index') }}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Voltar
+                    <i class="fas fa-arrow-left"></i> Come back
                 </a>
-                <button type="submit" class="btn btn-warning">Atualizar</button>
+                <button type="submit" class="btn btn-warning">Update Seat</button>
             </div>
         </form>
     </div>

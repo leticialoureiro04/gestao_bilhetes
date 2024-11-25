@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bilhetes Exportados</title>
+    <title>Exported Tickets</title>
 </head>
 <body>
-    <h1>Lista de Bilhetes</h1>
+    <h1>Ticket List</h1>
     <table border="1" cellspacing="0" cellpadding="5">
         <thead>
             <tr>
-                <th>Estádio</th>
-                <th>Bancada</th>
-                <th>Assento</th>
-                <th>Preço</th>
-                <th>Data de Criação</th>
+                <th>Stadium</th>
+                <th>Stand</th>
+                <th>Seat</th>
+                <th>Price</th>
+                <th>Creation Date</th>
             </tr>
         </thead>
         <tbody>
