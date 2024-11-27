@@ -4,17 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\SeatType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\App;
 
 class SeatTypeController extends Controller
 {
     public function index()
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $seatTypes = SeatType::all();
         return view('seat_types.index', compact('seatTypes'));
     }
 
     public function create()
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         return view('seat_types.create');
     }
 
@@ -33,6 +41,9 @@ class SeatTypeController extends Controller
 
     public function edit(SeatType $seatType)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         return view('seat_types.edit', compact('seatType'));
     }
 
@@ -51,6 +62,9 @@ class SeatTypeController extends Controller
 
     public function destroy(SeatType $seatType)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $seatType->delete();
         return redirect()->route('seat_types.index')->with('success', 'Tipo de Lugar eliminado com sucesso!');
     }
