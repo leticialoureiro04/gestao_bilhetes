@@ -7,12 +7,17 @@ use App\Models\Stadium;
 use APP\Models\StadiumPlan;
 use App\Models\Stand;
 use App\Models\Seat;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\App;
 
 class StadiumController extends Controller
 {
     // Função para listar os estádios
     public function index()
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $stadiums = Stadium::all();
         return view('stadiums.index', compact('stadiums'));
     }
@@ -20,6 +25,9 @@ class StadiumController extends Controller
     // Função para mostrar o formulário de criação de estádio
     public function create()
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         return view('stadiums.create');
     }
 
@@ -42,6 +50,9 @@ class StadiumController extends Controller
     // Função para mostrar o formulário de edição de estádio
     public function edit(Stadium $stadium)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         return view('stadiums.edit', compact('stadium'));
     }
 
@@ -63,11 +74,17 @@ class StadiumController extends Controller
     // Função para eliminar o estádio da base de dados
     public function destroy(Stadium $stadium)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $stadium->delete();
         return redirect()->route('stadiums.index')->with('success', 'Estádio eliminado com sucesso.');
     }
     public function getStadiumPlans(Request $request)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $stadiumId = $request->stadium_id;
 
         // Obtém as plantas do estádio com base no ID do estádio
@@ -77,6 +94,9 @@ class StadiumController extends Controller
     }
     public function getStadiumPlansByStadiumId(Request $request)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $stadiumId = $request->input('stadium_id');
         $plans = StadiumPlan::where('stadium_id', $stadiumId)->get();
 
@@ -85,6 +105,9 @@ class StadiumController extends Controller
 
     public function view(Request $request, $stadium_id)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         // Obter o estádio pelo ID
         $stadium = Stadium::findOrFail($stadium_id);
 
@@ -140,6 +163,9 @@ class StadiumController extends Controller
 
 public function viewLayout($stadium_id)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         // Obter o estádio pelo ID e carregar as bancadas associadas
         $stadium = Stadium::with('stands')->findOrFail($stadium_id);
 
