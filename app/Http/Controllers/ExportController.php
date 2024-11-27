@@ -13,12 +13,17 @@ use App\Exports\TicketsExport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TestEmail;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 
 class ExportController extends Controller
 {
     // Função para exibir a nova página de relatórios
     public function show()
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         // Obter estádios e bancadas para os filtros
         $stadiums = Stadium::all();
         $bancadas = Stand::distinct('name')->get();
@@ -35,6 +40,9 @@ class ExportController extends Controller
     // Função para processar a exportação
     public function exportMap(Request $request)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         // Captura os filtros do formulário
         $stadiumId = $request->input('stadium');
         $bancadaId = $request->input('bancada');
@@ -81,6 +89,9 @@ class ExportController extends Controller
     // Exportar para PDF e enviar por email
     private function exportPDF($tickets)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         // Geração do PDF
         $pdf = Pdf::loadView('exports.tickets_pdf', compact('tickets'));
 
@@ -102,6 +113,9 @@ class ExportController extends Controller
     // Exportar para Excel e enviar por email
     private function exportExcel($tickets)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $stadiumId = request()->input('stadium');
         $bancadaId = request()->input('bancada');
 
