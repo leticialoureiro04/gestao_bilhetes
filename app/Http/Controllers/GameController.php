@@ -6,12 +6,18 @@ use App\Models\Game;
 use App\Models\Stadium;
 use App\Models\Team;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\App;
+
 
 class GameController extends Controller
 {
     // Exibe a lista de jogos para o usuário selecionar
     public function index()
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $games = Game::with('stadium', 'teams')->get();
         return view('games.index', compact('games'));
     }
@@ -25,6 +31,9 @@ class GameController extends Controller
 
     public function create()
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $stadiums = Stadium::all();
         $teams = Team::all();
         return view('games.create', compact('stadiums', 'teams'));
@@ -50,6 +59,9 @@ class GameController extends Controller
 
     public function edit(Game $game)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $stadiums = Stadium::all();
         $teams = Team::all();
         return view('games.edit', compact('game', 'stadiums', 'teams'));
@@ -77,6 +89,9 @@ class GameController extends Controller
 
     public function destroy(Game $game)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $game->delete();
         return redirect()->route('games.index')->with('success', 'Jogo eliminado com sucesso!');
     }

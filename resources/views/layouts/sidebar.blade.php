@@ -2,7 +2,7 @@
     <!-- Brand Logo -->
     <a href="{{ route('dashboard') }}" class="brand-link">
         <img src="{{ asset('adminlte/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">AdminLTE</span>
+        <span class="brand-text font-weight-light">AdminLTE </span>
     </a>
 
     <!-- Sidebar -->
@@ -14,7 +14,7 @@
             </div>
             <div class="info">
                 <a href="#" class="d-block">
-                    {{ Auth::check() ? Auth::user()->name : 'Visitante' }}
+                    {{ Auth::check() ? Auth::user()->name : __('sidebar.visitor') }}
                 </a>
             </div>
         </div>
@@ -27,7 +27,7 @@
                 <li class="nav-item">
                     <a href="{{ route('dashboard') }}" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>Dashboard</p>
+                        <p>{{ __('sidebar.dashboard') }}</p>
                     </a>
                 </li>
 
@@ -37,49 +37,43 @@
                     <li class="nav-item has-treeview">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-cog"></i>
-                            <p>Administration</p>
+                            <p>{{ __('sidebar.administration') }}</p>
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
                                 <a href="{{ url('/users') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Manage Users</p>
+                                    <p>{{ __('sidebar.manage_users') }}</p>
                                 </a>
                             </li>
-                            <!--<li class="nav-item">
-                                <a href="{{ route('stadium_plans.index') }}" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Gerir Plantas de Estádio</p>
-                                </a>
-                            </li>-->
                             <li class="nav-item">
                                 <a href="{{ route('seat_types.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Manage Seat Types</p>
+                                    <p>{{ __('sidebar.manage_seat_types') }}</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('seats.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Manage Seats</p>
+                                    <p>{{ __('sidebar.manage_seats') }}</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('roles.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Role List</p>
+                                    <p>{{ __('sidebar.manage_roles') }}</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('teams.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Manage Teams</p>
+                                    <p>{{ __('sidebar.manage_teams') }}</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('games.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Manage Games</p>
+                                    <p>{{ __('sidebar.manage_games') }}</p>
                                 </a>
                             </li>
                         </ul>
@@ -90,7 +84,7 @@
                 <li class="nav-item">
                     <a href="{{ route('tickets.index') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Manage Tickets</p>
+                        <p>{{ __('sidebar.manage_tickets') }}</p>
                     </a>
                 </li>
             </ul>
@@ -99,6 +93,7 @@
     </div>
     <!-- /.sidebar -->
 </aside>
+
 
 
 
