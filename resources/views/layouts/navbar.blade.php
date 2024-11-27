@@ -29,6 +29,22 @@
                 </form>
             </div>
         </li>
+
+<!-- Language Switcher -->
+<li class="nav-item dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown" aria-expanded="false">
+        {{ config('languages')[session('locale', config('app.locale'))] }}
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+        @foreach (config('languages') as $lang => $language)
+            <li>
+                <a class="dropdown-item" href="{{ route('lang.switch', $lang) }}">{{ $language }}</a>
+            </li>
+        @endforeach
+    </ul>
+</li>
+
+        </li>
     </ul>
 </nav>
 

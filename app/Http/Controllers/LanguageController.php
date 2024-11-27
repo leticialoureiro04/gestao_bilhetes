@@ -3,29 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
+
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
 
 class LanguageController extends Controller
 {
-    public function change(Request $request)
+    public function switchLang($lang)
     {
-        $language = $request->input('language'); // Captura o idioma enviado pelo formulário
-        $availableLanguages = ['pt', 'en']; // Idiomas disponíveis
-
-        if (in_array($language, $availableLanguages)) {
-            Session::put('locale', $language); // Salva o idioma na sessão
-            App::setLocale($language); // Define o idioma na aplicação
-
-            logger()->info('Idioma salvo na sessão:', ['locale' => Session::get('locale')]);
+        if (array_key_exists($lang, Config::get('languages'))) {
+            Session::put('locale', $lang);
         }
-
-        return redirect()->back(); // Redireciona de volta para a página atual
+        return Redirect::back();
     }
 }
-
-
-
-
-
-

@@ -1,22 +1,18 @@
 @extends('layouts.app')
 
-@section('title', __('Dashboard'))
+@section('title', __('messages.dashboard'))
 
 @section('content')
 <div class="container-fluid">
     <!-- Seleção de Idioma -->
     <div class="d-flex justify-content-end mb-3">
-        <form action="{{ route('language.change') }}" method="POST">
-            @csrf
-            <select name="language" onchange="this.form.submit()" class="form-control" style="width: auto;">
-                <option value="pt" {{ app()->getLocale() == 'pt' ? 'selected' : '' }}>Português</option>
-                <option value="en" {{ app()->getLocale() == 'en' ? 'selected' : '' }}>English</option>
-            </select>
-        </form>
+        <!-- Exibição do idioma atual -->
+        <p>Idioma na Sessão: {{ session('app.locale') }}</p>
+    <p>Idioma Atual (App): {{ app()->getLocale() }}</p>
     </div>
 
     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        {{ __('Dashboard') }}
+        {{trans('messages.dashboard') }}
     </h2>
 
     <!-- Dashboard para Administrador -->
@@ -27,12 +23,12 @@
                 <div class="small-box bg-info">
                     <div class="inner">
                         <h3>150</h3>
-                        <p>{{ ('Users') }}</p>
+                        <p>{{ __('messages.users') }}</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <a href="{{ url('/users') }}" class="small-box-footer">{{ __('Manage Users') }} <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ url('/users') }}" class="small-box-footer">{{ __('messages.manage_users') }} <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 
@@ -40,12 +36,12 @@
                 <div class="small-box bg-success">
                     <div class="inner">
                         <h3>53</h3>
-                        <p>{{ __('Stadiums') }}</p>
+                        <p>{{ __('messages.stadiums') }}</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-building"></i>
                     </div>
-                    <a href="{{ route('stadiums.index') }}" class="small-box-footer">{{ __('Manage Stadiums') }} <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('stadiums.index') }}" class="small-box-footer">{{ __('messages.manage_stadiums') }} <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 
@@ -53,12 +49,12 @@
                 <div class="small-box bg-warning">
                     <div class="inner">
                         <h3>44</h3>
-                        <p>{{ __('Games') }}</p>
+                        <p>{{ __('messages.games') }}</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-futbol"></i>
                     </div>
-                    <a href="{{ route('games.index') }}" class="small-box-footer">{{ __('Manage Games') }} <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('games.index') }}" class="small-box-footer">{{ __('messages.manage_games') }} <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 
@@ -66,12 +62,12 @@
                 <div class="small-box bg-danger">
                     <div class="inner">
                         <h3>65</h3>
-                        <p>{{ __('Tickets') }}</p>
+                        <p>{{ __('messages.tickets') }}</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-ticket-alt"></i>
                     </div>
-                    <a href="{{ route('tickets.index') }}" class="small-box-footer">{{ __('Manage Tickets') }} <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('tickets.index') }}" class="small-box-footer">{{ __('messages.manage_tickets') }} <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 
@@ -79,13 +75,13 @@
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-primary">
                     <div class="inner">
-                        <h3>Reporting</h3>
-                        <p>Export</p>
+                        <h3>{{ __('messages.reports') }}</h3>
+                        <p>{{ __('messages.export') }}</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-file-export"></i>
                     </div>
-                    <a href="{{ route('relatorios.index') }}" class="small-box-footer">Generate Reports <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('relatorios.index') }}" class="small-box-footer">{{ __('messages.generate_reports') }} <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
         </div>
@@ -96,7 +92,7 @@
             <div class="col-lg-6">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Sales per Week</h3>
+                        <h3 class="card-title">{{ __('messages.sales_per_week') }}</h3>
                     </div>
                     <div class="card-body text-center">
                         <canvas id="salesChart" style="height: 200px; max-width: 90%;"></canvas>
@@ -108,7 +104,7 @@
             <div class="col-lg-6">
                 <div class="card card-success">
                     <div class="card-header">
-                        <h3 class="card-title">Tickets Sold by Type</h3>
+                        <h3 class="card-title">{{ __('messages.tickets_sold_by_type') }}</h3>
                     </div>
                     <div class="card-body text-center">
                         <canvas id="ticketsChart" style="height: 200px; max-width: 90%;"></canvas>
@@ -126,7 +122,7 @@
     // Dados para os gráficos vindos do backend
     const salesData = @json($sales->pluck('total'));
     const salesLabels = @json($sales->pluck('week')->map(function ($week) {
-        return 'Semana ' . $week;
+        return "{{ __('messages.week') }}" . ' ' . $week;
     }));
 
     const ticketsData = @json($ticketsByType->pluck('total'));
@@ -140,7 +136,7 @@
             data: {
                 labels: salesLabels,
                 datasets: [{
-                    label: 'Vendas',
+                    label: "{{ __('messages.sales') }}",
                     data: salesData,
                     borderColor: 'rgba(60, 141, 188, 1)',
                     backgroundColor: 'rgba(60, 141, 188, 0.5)',
@@ -181,6 +177,8 @@
     }
 </script>
 @endpush
+
+
 
 
 

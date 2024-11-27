@@ -4,11 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
+
 
 class DashboardController extends Controller
 {
     public function index()
     {
+
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         // Consulta para obter o número de bilhetes vendidos por tipo de assento
         $ticketsByType = DB::table('tickets')
             ->join('seats', 'tickets.seat_id', '=', 'seats.id') // Relaciona tickets com seats

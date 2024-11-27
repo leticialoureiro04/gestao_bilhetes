@@ -11,17 +11,19 @@ use App\Http\Controllers\SeatController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TicketController;
-use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\StandController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\EmailTestController;
+use App\Http\Controllers\LanguageController;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TestEmail;
+use Illuminate\Support\Facades\Session;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
 
 // Middleware para autenticação e verificação de sessão
 Route::middleware([
@@ -94,9 +96,6 @@ Route::get('/stadium-plan/{id}', [StadiumPlanController::class, 'show'])->name('
 // Rota para configurar papéis e permissões (pode ser duplicada, verifique a necessidade)
 Route::get('/setup-roles-permissions', [SetupController::class, 'setupRolesAndPermissions']);
 
-
-Route::post('/language', [LanguageController::class, 'change'])->name('language.change');
-
 Route::get('/stands/configure/{stadium_id}', [StandController::class, 'configure'])->name('stands.configure');
 Route::post('/stands/store', [StandController::class, 'store'])->name('stands.store');
 Route::put('/stands/{stand}', [StandController::class, 'update'])->name('stands.update');
@@ -138,3 +137,16 @@ Route::get('/relatorios', [ExportController::class, 'show'])->name('relatorios.i
 Route::post('/relatorios/export', [ExportController::class, 'exportMap'])->name('relatorios.export');
 
 Route::get('/bancadas/{stadium}', [ExportController::class, 'getBancadas']);
+
+Route::get('lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'pt'])) {
+        session::put('locale', $locale);
+    }
+    return redirect()->back();
+})->name('lang.switch');
+
+// Troca de idioma
+Route::get('lang/{locale}', [LanguageController::class, 'switchLang'])->name('lang.switch');
+
+// Dashboard com verificação de idioma
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

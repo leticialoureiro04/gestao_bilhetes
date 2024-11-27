@@ -54,6 +54,8 @@
                     @yield('content')
                 </div>
             </section>
+
+            
         </div>
 
         <!-- Footer -->
