@@ -7,12 +7,17 @@ use App\Models\Stand;
 use App\Models\Seat;
 use App\Models\SeatType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\App;
 
 class StandController extends Controller
 {
     // Método para exibir a página de configuração das bancadas
     public function configure($stadium_id)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         // Obtém o estádio pelo ID
         $stadium = Stadium::findOrFail($stadium_id);
         $seatTypes = SeatType::all();
@@ -85,6 +90,9 @@ class StandController extends Controller
     // Método para exibir as bancadas de um estádio
     public function show($stadium_id)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $stadium = Stadium::with('stands')->findOrFail($stadium_id);
         return view('stands.show', compact('stadium'));
     }
@@ -111,6 +119,9 @@ class StandController extends Controller
 
     public function showSeats($stand_id)
 {
+    $locale = Session::get('locale', config('app.locale'));
+     App::setLocale($locale);
+
     $stand = Stand::with('seats')->findOrFail($stand_id);
 
     return view('stands.show', compact('stand'));
@@ -126,6 +137,9 @@ public function getSeats($standId)
     }
     public function view($standId)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         // Buscar a bancada pelo ID e carregar os assentos associados
         $stand = Stand::with('seats')->findOrFail($standId);
 
