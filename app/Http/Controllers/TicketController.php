@@ -14,11 +14,17 @@ use App\Models\SeatType;
 use Illuminate\Support\Facades\Log;
 use App\Services\GesFaturacaoService;
 use App\Models\Invoice;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\App;
 
 class TicketController extends Controller
 {
     public function index()
     {
+
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $user = Auth::user();
 
         if ($user->roles->contains('name', 'admin')) {
@@ -34,6 +40,9 @@ class TicketController extends Controller
 
     public function create(Request $request)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $games = Game::with('stadium')->get();
         $stadiums = Stadium::all();
         $seatTypes = SeatType::all();
@@ -80,6 +89,10 @@ class TicketController extends Controller
 
     public function edit(Ticket $ticket)
     {
+
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $games = Game::all();
         $seats = Seat::where('status', 'disponível')->orWhere('id', $ticket->seat_id)->get();
         return view('tickets.edit', compact('ticket', 'games', 'seats'));

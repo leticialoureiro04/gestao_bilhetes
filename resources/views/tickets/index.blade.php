@@ -4,25 +4,20 @@
 <div class="container">
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Ticket List</h3>
-            <!--@if(auth()->user()->hasRole('admin'))
-                <a href="{{ route('tickets.create') }}" class="btn btn-primary float-right">
-                    <i class="fas fa-plus"></i> Issue New Ticket
-                </a>
-            @endif-->
+            <h3 class="card-title">{{ __('tickets.ticket_list') }}</h3>
         </div>
         <div class="card-body">
             <table id="ticketsTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Game</th>
-                        <th>Seat</th>
-                        <th>User</th>
-                        <th>Price</th>
-                        <th>Status</th>
+                        <th>{{ __('tickets.id') }}</th>
+                        <th>{{ __('tickets.game') }}</th>
+                        <th>{{ __('tickets.seat') }}</th>
+                        <th>{{ __('tickets.user') }}</th>
+                        <th>{{ __('tickets.price') }}</th>
+                        <th>{{ __('tickets.status') }}</th>
                         @if(auth()->user()->hasRole('admin'))
-                            <th>Actions</th>
+                            <th>{{ __('tickets.actions') }}</th>
                         @endif
                     </tr>
                 </thead>
@@ -34,27 +29,27 @@
                             <td>{{ chr(64 + $ticket->seat->row_number) }}-{{ $ticket->seat->seat_number }}</td>
                             <td>{{ $ticket->user->name }}</td>
                             <td>{{ $ticket->price }}</td>
-                            <td>{{ $ticket->status }}</td>
+                            <td>{{ __('tickets.' . $ticket->status) }}</td>
                             @if(auth()->user()->hasRole('admin'))
                                 <td>
                                     <form action="{{ route('tickets.destroy', $ticket->id) }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this ticket?')">
-                                            <i class="fas fa-trash"></i> Cancel
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('{{ __('tickets.confirm_cancel') }}')">
+                                            <i class="fas fa-trash"></i> {{ __('tickets.cancel') }}
                                         </button>
                                     </form>
                                     @if($ticket->status === 'disponível')
                                         <form action="{{ route('tickets.sell', $ticket->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             <button type="submit" class="btn btn-success">
-                                                <i class="fas fa-dollar-sign"></i> Sell
+                                                <i class="fas fa-dollar-sign"></i> {{ __('tickets.sell') }}
                                             </button>
                                         </form>
                                         <form action="{{ route('tickets.reserve', $ticket->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             <button type="submit" class="btn btn-secondary">
-                                                <i class="fas fa-bookmark"></i> Book
+                                                <i class="fas fa-bookmark"></i> {{ __('tickets.reserve') }}
                                             </button>
                                         </form>
                                     @endif
@@ -65,7 +60,7 @@
                 </tbody>
             </table>
             <div class="mt-3">
-                <p class="text-muted">Total Tickets: {{ $tickets->count() }}</p>
+                <p class="text-muted">{{ __('tickets.total_tickets') }}: {{ $tickets->count() }}</p>
             </div>
         </div>
     </div>

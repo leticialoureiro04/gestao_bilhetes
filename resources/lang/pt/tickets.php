@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'ticket_list' => 'Lista de Bilhetes',
+    'id' => 'ID',
+    'game' => 'Jogo',
+    'seat' => 'Lugar',
+    'user' => 'Utilizador',
+    'price' => 'Preço',
+    'status' => 'Estado',
+    'actions' => 'Ações',
+    'cancel' => 'Cancelar',
+    'sell' => 'Vender',
+    'reserve' => 'Reservar',
+    'confirm_cancel' => 'Tem certeza de que deseja cancelar este bilhete?',
+    'total_tickets' => 'Total de Bilhetes',
+    'issue_ticket' => 'Emitir Bilhete',
+    'select_game' => 'Selecione um Jogo',
+    'stadium' => 'Estádio',
+    'stadium_plan' => 'Planta do Estádio',
+    'select_stadium_plan' => 'Selecione a Planta do Estádio',
+    'type_of_place' => 'Tipo de Lugar',
+    'select_type_of_place' => 'Selecione o Tipo de Lugar',
+    'place' => 'Lugar',
+    'select_place' => 'Selecione um Lugar',
+    'back' => 'Voltar',
+];
