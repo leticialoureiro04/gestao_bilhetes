@@ -12,7 +12,7 @@
     </div>
 
     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        {{trans('messages.dashboard') }}
+        {{__('messages.dashboard') }}
     </h2>
 
     <!-- Dashboard para Administrador -->
@@ -121,9 +121,7 @@
 <script>
     // Dados para os gráficos vindos do backend
     const salesData = @json($sales->pluck('total'));
-    const salesLabels = @json($sales->pluck('week')->map(function ($week) {
-        return "{{ __('messages.week') }}" . ' ' . $week;
-    }));
+    const salesLabels = @json($sales->pluck('week')).map((week) => `Week`);
 
     const ticketsData = @json($ticketsByType->pluck('total'));
     const ticketsLabels = @json($ticketsByType->pluck('type'));
