@@ -35,16 +35,23 @@
         <!-- Language Switcher -->
         <li class="nav-item dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown" aria-expanded="false">
-                {{ config('languages')[session('locale', config('app.locale'))] }}
+                <span class="flag-icon flag-icon-{{ Config::get('languages')[App::getLocale()]['flag-icon'] }}"></span>
+                {{ Config::get('languages')[App::getLocale()]['display'] }}
             </button>
             <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-                @foreach (config('languages') as $lang => $language)
-                    <li>
-                        <a class="dropdown-item" href="{{ route('lang.switch', $lang) }}">{{ $language }}</a>
-                    </li>
+                @foreach (Config::get('languages') as $lang => $language)
+                    @if ($lang != App::getLocale())
+                        <li>
+                            <a class="dropdown-item" href="{{ route('lang.switch', $lang) }}">
+                                <span class="flag-icon flag-icon-{{ $language['flag-icon'] }}"></span>
+                                {{ $language['display'] }}
+                            </a>
+                        </li>
+                    @endif
                 @endforeach
             </ul>
         </li>
+
     </ul>
 </nav>
 

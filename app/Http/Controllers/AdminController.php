@@ -40,11 +40,11 @@ class AdminController extends Controller
     }
 
     // Lista de Papéis (Roles)
-    public function manageRoles()
+    /*public function manageRoles()
     {
         $roles = Role::all();
         return view('roles.index', compact('roles'));
-    }
+    }*/
 
     // Gerir Equipas
     public function manageTeams()

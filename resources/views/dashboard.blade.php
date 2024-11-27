@@ -6,9 +6,6 @@
 <div class="container-fluid">
     <!-- Seleção de Idioma -->
     <div class="d-flex justify-content-end mb-3">
-        <!-- Exibição do idioma atual -->
-        <p>Idioma na Sessão: {{ session('app.locale') }}</p>
-    <p>Idioma Atual (App): {{ app()->getLocale() }}</p>
     </div>
 
     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
