@@ -7,17 +7,25 @@ use App\Models\Stand;
 use App\Models\StadiumPlan;
 use App\Models\SeatType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\App;
 
 class SeatController extends Controller
 {
     public function index()
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $seats = Seat::with(['stand.stadium', 'stadiumPlan', 'seatType'])->get();
         return view('seats.index', compact('seats'));
     }
 
     public function create()
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $stadiumPlans = StadiumPlan::with('stadium')->get();
         $seatTypes = SeatType::all();
         $stands = Stand::all(); // Adiciona stands aqui
@@ -42,6 +50,9 @@ class SeatController extends Controller
 
     public function edit(Seat $seat)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $stadiumPlans = StadiumPlan::all();
         $seatTypes = SeatType::all();
         $stands = Stand::all();
@@ -66,6 +77,9 @@ class SeatController extends Controller
 
     public function destroy(Seat $seat)
     {
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+
         $seat->delete();
         return redirect()->route('seats.index')->with('success', 'Lugar eliminado com sucesso!');
     }
