@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'dashboard' => 'Painel de Controle',
+    'dashboard' => 'Painel de Controlo',
     'users' => 'Utilizadores',
     'manage_users' => 'Gerir Utilizadores',
     'stadiums' => 'Estádios',

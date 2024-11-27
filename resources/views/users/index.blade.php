@@ -4,22 +4,20 @@
 <div class="container">
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">List of Users</h3>
+            <h3 class="card-title">{{ __('users.list_users') }}</h3>
             <div class="card-tools">
-                <a href="{{ route('users.create') }}" class="btn btn-success btn-sm">Add User</a>
+                <a href="{{ route('users.create') }}" class="btn btn-success btn-sm">{{ __('users.add_user') }}</a>
             </div>
         </div>
-        <!-- /.card-header -->
-
         <div class="card-body">
             <table id="myTable" class="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Paper</th>
-                        <th>Actions</th>
+                        <th>{{ __('users.name') }}</th>
+                        <th>{{ __('users.email') }}</th>
+                        <th>{{ __('users.role') }}</th>
+                        <th>{{ __('users.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,21 +30,21 @@
                                 @if($user->roles->isNotEmpty())
                                     {{ $user->roles->pluck('name')->join(', ') }}
                                 @else
-                                    <span class="badge badge-secondary">Paperless</span>
+                                    <span class="badge badge-secondary">{{ __('users.paperless') }}</span>
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm mr-1">
-                                    <i class="fas fa-edit"></i> Edit
+                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-edit"></i> {{ __('users.edit_user') }}
                                 </a>
-                                <a href="{{ route('users.assign_role', $user->id) }}" class="btn btn-primary btn-sm mr-1">
-                                    <i class="fas fa-user-tag"></i> Assign role
+                                <a href="{{ route('users.assign_role', $user->id) }}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-user-tag"></i> {{ __('users.assign_role') }}
                                 </a>
                                 <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">
-                                        <i class="fas fa-trash-alt"></i> Delete
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('{{ __('users.delete_confirm') }}')">
+                                        <i class="fas fa-trash-alt"></i> {{ __('users.delete') }}
                                     </button>
                                 </form>
                             </td>
@@ -55,14 +53,10 @@
                 </tbody>
             </table>
         </div>
-        <!-- /.card-body -->
-
         <div class="card-footer">
-            <p class="text-muted">Total of users: {{ $users->count() }}</p>
+            <p class="text-muted">{{ __('users.total_users') }}: {{ $users->count() }}</p>
         </div>
-        <!-- /.card-footer -->
     </div>
-    <!-- /.card -->
 </div>
 @endsection
 
@@ -75,6 +69,7 @@
     });
 </script>
 @endpush
+
 
 
 
