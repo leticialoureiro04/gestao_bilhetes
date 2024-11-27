@@ -4,9 +4,9 @@
 <div class="container">
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">List of Papers</h3>
+            <h3 class="card-title">{{ __('roles.list_of_roles') }}</h3>
             <a href="{{ route('roles.create') }}" class="btn btn-primary float-right">
-                <i class="fas fa-plus"></i> Add Role
+                <i class="fas fa-plus"></i> {{ __('roles.add_role') }}
             </a>
         </div>
         <div class="card-body">
@@ -14,8 +14,8 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>Actions</th>
+                        <th>{{ __('roles.role_name') }}</th>
+                        <th>{{ __('roles.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -25,13 +25,13 @@
                             <td>{{ $role->name }}</td>
                             <td>
                                 <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-warning">
-                                    <i class="fas fa-edit"></i> Edit
+                                    <i class="fas fa-edit"></i> {{ __('roles.edit_role') }}
                                 </a>
                                 <form action="{{ route('roles.destroy', $role->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">
-                                        <i class="fas fa-trash"></i> Delete
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('{{ __('roles.confirm_delete') }}')">
+                                        <i class="fas fa-trash"></i> {{ __('roles.delete') }}
                                     </button>
                                 </form>
                             </td>
@@ -40,7 +40,7 @@
                 </tbody>
             </table>
             <div class="mt-3">
-                <p class="text-muted">Total Papers: {{ $roles->count() }}</p>
+                <p class="text-muted">{{ __('roles.total_roles') }}: {{ $roles->count() }}</p>
             </div>
         </div>
     </div>
@@ -56,5 +56,6 @@
     });
 </script>
 @endpush
+
 
 
