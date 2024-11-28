@@ -29,7 +29,7 @@
                             <td>{{ chr(64 + $ticket->seat->row_number) }}-{{ $ticket->seat->seat_number }}</td>
                             <td>{{ $ticket->user->name }}</td>
                             <td>{{ $ticket->price }}</td>
-                            <td>{{ __('tickets.' . $ticket->status) }}</td>
+                            <td>{{( $ticket->status) }}</td>
                             @if(auth()->user()->hasRole('admin'))
                                 <td>
                                     <form action="{{ route('tickets.destroy', $ticket->id) }}" method="POST" style="display:inline;">
@@ -43,7 +43,7 @@
                                         <form action="{{ route('tickets.sell', $ticket->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             <button type="submit" class="btn btn-success">
-                                                <i class="fas fa-dollar-sign"></i> {{ __('tickets.sell') }}
+                                                <i class="fas fa-dollar-sign"></i> {{ ('tickets.sell') }}
                                             </button>
                                         </form>
                                         <form action="{{ route('tickets.reserve', $ticket->id) }}" method="POST" style="display:inline;">

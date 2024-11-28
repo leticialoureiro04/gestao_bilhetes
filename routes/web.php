@@ -19,6 +19,7 @@ use App\Http\Controllers\LanguageController;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TestEmail;
 use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\InvoiceController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -150,3 +151,5 @@ Route::get('lang/{locale}', [LanguageController::class, 'switchLang'])->name('la
 
 // Dashboard com verificação de idioma
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+

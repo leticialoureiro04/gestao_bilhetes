@@ -37,16 +37,77 @@
             @endfor
         </div>
 
-        <form id="purchaseForm">
+        <form id="purchaseForm" method="POST" action="{{ route('tickets.buy') }}">
             @csrf
             <input type="hidden" name="seat_ids" id="selectedSeats" value="">
             <button id="confirmPurchase" class="btn btn-primary mt-3" disabled>{{ __('stands.buy_seats') }}</button>
         </form>
     @endif
 </div>
+
+<style>
+    .seats-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .seat-row {
+        display: flex;
+        gap: 5px;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        color: black;
+    }
+
+    .btn-selected {
+        background-color: #007bff; /* Azul para lugares selecionados */
+        color: white;
+    }
+</style>
 @endsection
 
+@push('scripts')
+<script>
+let selectedSeats = [];
 
+document.querySelectorAll('.seat-button').forEach(button => {
+    button.addEventListener('click', function () {
+        const seatId = this.getAttribute('data-seat-id');
+
+        // Alternar seleção
+        if (selectedSeats.includes(seatId)) {
+            // Remover da seleção
+            selectedSeats = selectedSeats.filter(id => id !== seatId);
+            this.classList.remove('btn-selected');
+        } else {
+            // Adicionar à seleção
+            selectedSeats.push(seatId);
+            this.classList.add('btn-selected');
+        }
+
+        // Atualizar o estado do botão de compra
+        document.getElementById('confirmPurchase').disabled = selectedSeats.length === 0;
+
+        // Atualizar o campo hidden com os IDs dos assentos selecionados
+        document.getElementById('selectedSeats').value = JSON.stringify(selectedSeats);
+    });
+});
+
+</script>
+@endpush
 
 
 

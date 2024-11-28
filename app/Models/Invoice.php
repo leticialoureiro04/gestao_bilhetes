@@ -9,7 +9,7 @@ class Invoice extends Model
 {
     use HasFactory;
 
-    // Permitir preenchimento em massa
+    // Define os campos que podem ser preenchidos via mass assignment
     protected $fillable = [
         'ticket_id',
         'total_amount',
