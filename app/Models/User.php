@@ -30,6 +30,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'country',
+        'vatNumber',
+        'id_gesfaturacao',
     ];
 
     /**
