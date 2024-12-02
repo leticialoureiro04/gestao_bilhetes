@@ -16,6 +16,7 @@ use App\Services\GesFaturacaoService;
 use App\Models\Invoice;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 
 class TicketController extends Controller
 {
@@ -63,7 +64,7 @@ class TicketController extends Controller
         $seat = Seat::findOrFail($request->seat_id);
         $price = $seat->seatType->price ?? 25;
 
-        $ticket =Ticket::create([
+        Ticket::create([
             'game_id' => $request->game_id,
             'seat_id' => $seat->id,
             'user_id' => Auth::id(),
@@ -71,21 +72,11 @@ class TicketController extends Controller
             'status' => 'vendido',
         ]);
 
-        $invoice = Invoice::create([
-            'ticket_id' => $ticket->id,
-            'user_id' => Auth::id(),
-            'title' => 'Fatura para o jogo ' . $ticket->game_id,
-            'total_amount' => $price,
-            'saldo' => $price,
-            'issue_date' => now(),
-            'expiration' => now()->addDays(7),
-            'status' => 'pendente',
-        ]);
-
         $seat->update(['status' => 'vendido']);
 
         return redirect()->route('tickets.index')->with('success', 'Bilhete emitido com sucesso!');
     }
+
 
     public function edit(Ticket $ticket)
     {
@@ -124,15 +115,6 @@ class TicketController extends Controller
             'status' => $request->status,
         ]);
 
-        $invoice = $ticket->invoice; // Obter a fatura associada
-        if ($invoice) {
-            $invoice->update([
-            'total_amount' => $request->price, // Atualize o valor total
-            'saldo' => $request->price, // Atualize o saldo
-            'status' => $request->status === 'vendido' ? 'pendente' : 'cancelada', // Atualizar status com base no ticket
-        ]);
-}
-
         return redirect()->route('tickets.index')->with('success', 'Bilhete atualizado com sucesso!');
     }
 
@@ -154,95 +136,90 @@ class TicketController extends Controller
         return redirect()->route('tickets.index')->with('success', 'Bilhete cancelado com sucesso!');
     }
 
-    public function buyTickets(Request $request,GesFaturacaoService $gesFaturacaoService)
+    public function buyTickets(Request $request)
 {
+    // Mesma lógica inicial
     $seatIds = $request->input('seat_ids');
     if (is_string($seatIds)) {
-        $seatIds = json_decode($seatIds, true); // Decodificar se for string JSON
+        $seatIds = json_decode($seatIds, true);
     }
 
-    Log::info('IDs de assentos recebidos:', ['seatIds' => $seatIds]);
-
-
     if (!$seatIds || count($seatIds) === 0) {
-        Log::warning('Nenhum lugar selecionado ou IDs inválidos.');
         return response()->json(['message' => 'Nenhum lugar selecionado.'], 400);
     }
 
     try {
         $seats = Seat::whereIn('id', $seatIds)->where('status', 'disponível')->get();
 
-        Log::info('Lugares encontrados:', ['seats' => $seats]);
-
         if ($seats->count() != count($seatIds)) {
-            Log::warning('Alguns lugares já foram vendidos ou não existem.');
             return response()->json(['message' => 'Alguns lugares já foram vendidos ou não existem.'], 400);
         }
 
+        $user = Auth::user();
+        $totalAmount = 0;
+        $ticketIds = [];
+
         foreach ($seats as $seat) {
-            // Use a tabela stands em vez de stadium_plans
             $stand = $seat->stand;
             if (!$stand) {
-                Log::error('Erro: Stand não encontrado para o lugar.', ['seat_id' => $seat->id]);
                 return response()->json(['message' => 'Erro interno ao processar a compra.'], 500);
             }
 
             $game = Game::where('stadium_id', $stand->stadium_id)->first();
 
             if (!$game) {
-                Log::error('Erro: Não foi possível encontrar o jogo associado ao estádio.', ['seat_id' => $seat->id]);
                 return response()->json(['message' => 'Erro ao encontrar o jogo para o estádio.'], 500);
             }
 
-            Log::info('Jogo encontrado para o lugar:', ['game_id' => $game->id]);
-
-            $ticket =Ticket::create([
+            $ticket = Ticket::create([
                 'game_id' => $game->id,
                 'seat_id' => $seat->id,
-                'user_id' => Auth::id(),
+                'user_id' => $user->id,
                 'price' => $seat->seatType->price ?? 25,
                 'status' => 'vendido',
             ]);
 
+            $ticketIds[] = $ticket->id;
+            $totalAmount += $ticket->price;
+
             $seat->update(['status' => 'vendido']);
-
-             // Criar a fatura no banco de dados
-             $invoice = Invoice::create([
-                'ticket_id' => $ticket->id,
-                'user_id' => Auth::id(), // ID do usuário autenticado
-                'title' => 'Fatura para o jogo ' . $game->id, // Título descritivo
-                'total_amount' => $ticket->price,
-                'saldo' => $ticket->price, // Inicialmente, o saldo é igual ao valor total
-                'issue_date' => now(), // Data de emissão da fatura
-                'expiration' => now()->addDays(7), // Definir a data de vencimento como 7 dias a partir de hoje
-                'status' => 'pendente',
-            ]);
-
-            Log::info('Fatura criada localmente.', ['invoice_id' => $invoice->id]);
-
-            Log::error('Erro ao criar fatura no método buyTickets.', [
-                'ticket_id' => $ticket->id,
-                'seat_id' => $seat->id,
-                'user_id' => Auth::id(),
-            ]);
-
-
-            // Enviar a fatura para a API GesFaturação
-            $response = $gesFaturacaoService->createInvoice([
-                'ticket_id' => $invoice->ticket_id,
-                'total_amount' => $invoice->total_amount,
-                'status' => $invoice->status,
-            ]);
-
-            if (!$response['success']) {
-                Log::warning('Fatura criada localmente, mas não foi enviada para a API.', ['invoice_id' => $invoice->id]);
-                return response()->json(['message' => 'Erro ao enviar fatura para a API.'], 500);
-            }
-
-            Log::info('Fatura enviada com sucesso para a API.', ['invoice_id' => $invoice->id]);
         }
 
-        Log::info('Compra concluída com sucesso.');
+        // Gerar a fatura e salvar na tabela invoices
+        $invoice = Invoice::create([
+            'user_id' => $user->id,
+            'ticket_id' => implode(',', $ticketIds),
+            'title' => 'Fatura para os bilhetes comprados',
+            'total_amount' => $totalAmount,
+            'saldo' => $totalAmount,
+            'issue_date' => now(),
+            'expiration' => now()->addDays(7),
+            'status' => 'pendente',
+        ]);
+
+        // Recuperar o token da tabela api_tokens
+        $token = DB::table('api_tokens')->where('user_id', $user->id)->value('token');
+        if (!$token) {
+            return response()->json(['message' => 'Erro: Token da API não encontrado para o usuário.'], 500);
+        }
+
+        // Enviar fatura para a API GESFaturação
+        $apiController = app(GESFaturacaoAPIController::class);
+        $apiResponse = $apiController->createInvoice([
+            'token' => $token, // Usar o token do banco
+            'user_id' => $user->id,
+            'title' => $invoice->title,
+            'total_amount' => $invoice->total_amount,
+            'issue_date' => $invoice->issue_date->toIso8601String(),
+            'expiration' => $invoice->expiration->toIso8601String(),
+            'status' => $invoice->status,
+            'ticket_ids' => $ticketIds,
+        ]);
+
+        if (!$apiResponse['success']) {
+            Log::error('Erro ao enviar a fatura para a API GESFaturação.', ['response' => $apiResponse]);
+        }
+
         return response()->json(['success' => true, 'message' => 'Compra realizada com sucesso!', 'redirect' => route('tickets.index')]);
     } catch (\Exception $e) {
         Log::error('Erro ao processar a compra de bilhetes:', ['message' => $e->getMessage()]);
@@ -250,43 +227,8 @@ class TicketController extends Controller
     }
 }
 
-private function sendInvoiceToGesFaturacao($invoice)
-{
-    $url = 'https://dev.gesfaturacao.pt/api/invoices'; // Endpoint da API
 
-    $data = [
-        'ticket_id' => $invoice->ticket_id,
-        'total_amount' => $invoice->total_amount,
-        'status' => $invoice->status,
-    ];
 
-    // Iniciar cURL
-    $ch = curl_init();
-
-    curl_setopt_array($ch, [
-        CURLOPT_URL => $url,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => json_encode($data),
-        CURLOPT_HTTPHEADER => [
-            'Authorization: Bearer ' . env('GESFATURACAO_TOKEN'), // Certifique-se de que o token é válido
-            'Content-Type: application/json',
-        ],
-    ]);
-
-    // Executar cURL
-    $response = curl_exec($ch);
-
-    // Fechar a sessão cURL
-    curl_close($ch);
-
-    // Verificar se a requisição foi bem-sucedida
-    if ($response) {
-        return ['success' => true, 'data' => json_decode($response)];
-    }
-
-    return ['success' => false, 'message' => 'Erro ao enviar fatura para a API.'];
-}
 
     public function getAvailableSeats(Request $request)
     {

@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'gesfaturacao' => [
+        'url' => env('API_URL', 'https://devipvc.gesfaturacao.pt/api'),
+        'version' => env('API_VERSION', 'v1.0.3'),
+        'username' => env('API_USERNAME', 'ipvc2'),
+        'password' => env('API_PASSWORD', 'ipvc2'),
+        'token' => env('TOKEN'),
+    ],
 ];
+

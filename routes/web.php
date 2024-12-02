@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\TestEmail;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\InvoiceController;
+use App\Services\GesFaturacaoService;
 
 Route::get('/', function () {
     return view('welcome');
@@ -126,9 +127,6 @@ Route::get('/relatorios', [App\Http\Controllers\ExportController::class, 'show']
 Route::get('/export-map', [App\Http\Controllers\ExportController::class, 'exportMap'])->name('export.map');
 
 
-Route::get('/test-gesfaturacao', function (App\Services\GesFaturacaoService $service) {
-    return $service->testConnection();
-});
 
 
 // Página para exibir os filtros e opções de exportação
@@ -151,5 +149,9 @@ Route::get('lang/{locale}', [LanguageController::class, 'switchLang'])->name('la
 
 // Dashboard com verificação de idioma
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+
+
+
 
 

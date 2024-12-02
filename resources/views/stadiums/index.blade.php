@@ -59,7 +59,15 @@
 </div>
 @endsection
 
-
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        $('#stadiumsTable').DataTable({
+            responsive: true,
+        });
+    });
+</script>
+@endpush
 
 
 

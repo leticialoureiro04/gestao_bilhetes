@@ -6,35 +6,57 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\GESFaturacaoAPIController;
 
 class AuthController extends Controller
 {
     /**
-     * Função para login e gerar o token de acesso.
+     * Função para login e geração de tokens.
      */
     public function login(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
+{
+    $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            // Gerar um novo token sempre que necessário
-            $token = $user->createToken('YourAppName');
-            $plainTextToken = $token->plainTextToken;
+    if (Auth::attempt($credentials)) {
+        $user = Auth::user();
 
-            return response()->json(['token' => $plainTextToken]);  // Retorna o token de acesso gerado
+        // Gera o token de acesso do Laravel Sanctum para o usuário autenticado
+        $appToken = $user->createToken('YourAppName')->plainTextToken;
+
+        // Gera o token da API GESFaturação
+        $gesfaturacaoController = app(GESFaturacaoAPIController::class); // Use o container para injetar dependências
+        $apiResponse = $gesfaturacaoController->loginAPI();
+
+        if ($apiResponse->getStatusCode() === 200 && $apiResponse->getData()->success) {
+            $apiToken = $apiResponse->getData()->token;
+
+            // Associa o token ao usuário logado na tabela api_tokens
+            DB::table('api_tokens')->updateOrInsert(
+                ['service' => 'gesfaturacao', 'user_id' => $user->id],
+                ['token' => $apiToken, 'created_at' => now(), 'updated_at' => now()]
+            );
+
+            // Retorna a resposta JSON contendo ambos os tokens
+            return response()->json([
+                'user' => $user,
+                'app_token' => $appToken, // Token para autenticação local
+                'api_token' => $apiToken  // Token da API GESFaturação
+            ]);
         } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            Log::error("Falha ao obter o token da API GESFaturação.");
+            return response()->json([
+                'user' => $user,
+                'app_token' => $appToken,
+                'error' => 'Falha ao conectar à API GESFaturação.'
+            ], 500);
         }
-    }
-
-    /**
-     * Método para renovar o token.
-     */
-    public function renewToken(Request $request)
-    {
-        // Chame o método de login para gerar um novo token
-        return $this->login($request);
+    } else {
+        return response()->json(['error' => 'Credenciais inválidas.'], 401);
     }
 }
+
+
+
+}
+
 
