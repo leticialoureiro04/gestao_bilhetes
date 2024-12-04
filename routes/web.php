@@ -21,9 +21,16 @@ use App\Mail\TestEmail;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\GESFaturacaoAPIController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('welcome');
+    // Verifica se o usuário está logado
+    if (Auth::check()) {
+        // Redireciona para o dashboard se estiver logado
+        return redirect()->route('dashboard');
+    }
+    // Se não estiver logado, redireciona para a página de login
+    return redirect()->route('login');
 });
 
 
@@ -152,7 +159,9 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 
 
 
+Route::get('/invoices/{id}', [InvoiceController::class, 'show'])->name('invoices.show');
+
+Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
 
 
-
-
+Route::post('/invoices/{id}/pay', [InvoiceController::class, 'pay'])->name('invoices.pay');

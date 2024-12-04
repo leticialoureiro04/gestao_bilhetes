@@ -17,5 +17,13 @@ return [
     'tickets_sold_by_type' => 'Bilhetes Vendidos por Tipo',
     'week' => 'Semana',
     'sales' => 'Vendas',
+    'invoices' => 'Faturas',
+    'manage_invoices' => 'Gerir Faturas',
+    'go_to_invoices' => 'Ir para Faturas',
+    'seats' => 'Lugares',
+    'manage_seats' => 'Gerir Lugares',
+    'teams' => 'Equipas',
+    'manage_teams' => 'Gerir Equipas',
+
 ];
 

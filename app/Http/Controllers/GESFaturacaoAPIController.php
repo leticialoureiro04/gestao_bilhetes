@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Http; // Facade para requisições HTTP
-use Illuminate\Support\Facades\Log;  // Para logging
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
 use App\Models\User;
+use App\Models\Ticket;
 
 class GESFaturacaoAPIController extends Controller
 {
@@ -53,17 +54,17 @@ public function validateToken()
 
     // Configuração do cURL com os parâmetros necessários
     curl_setopt_array($curl, [
-        CURLOPT_URL => $url, // URL para o endpoint
-        CURLOPT_RETURNTRANSFER => true, // Retorna o resultado em vez de exibir
-        CURLOPT_ENCODING => '', // Sem encoding específico
-        CURLOPT_MAXREDIRS => 10, // Máximo de redirecionamentos
-        CURLOPT_TIMEOUT => 0, // Sem limite de tempo
-        CURLOPT_FOLLOWLOCATION => true, // Seguir redirecionamentos
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, // Versão do HTTP
-        CURLOPT_CUSTOMREQUEST => 'POST', // Método POST
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_HTTPHEADER => [
-            "Authorization: $token", // Cabeçalho com o token
-            'Cookie: PHPSESSID=1d360bcc6974427c545f9bd8c85e2b64' // Cookie, se necessário
+            "Authorization: $token",
+            'Cookie: PHPSESSID=1d360bcc6974427c545f9bd8c85e2b64'
         ],
     ]);
 
@@ -96,45 +97,6 @@ public function validateToken()
     ], 401);
 }
 
-
-
-    /**
-     * Cria uma nova fatura na API.
-     *
-     * @param array $data Dados da fatura
-     * @return array Resposta da API
-     */
-    public function createInvoice(array $data): array
-    {
-        $url = "{$this->apiUrl}/{$this->apiVersion}/invoices"; // Endpoint de criação de fatura
-
-        try {
-            $response = Http::withHeaders([
-                'Authorization' => "Bearer {$this->getToken()}", // Usa o token atual
-                'Content-Type' => 'application/json',
-            ])->post($url, $data);
-
-            if ($response->successful()) {
-                return [
-                    'success' => true,
-                    'data' => $response->json(),
-                ];
-            }
-
-            Log::error('Erro ao criar fatura. Resposta: ' . $response->body());
-            return [
-                'success' => false,
-                'message' => 'Erro ao criar fatura. Resposta: ' . $response->body(),
-            ];
-        } catch (\Exception $e) {
-            Log::error('Erro ao criar fatura: ' . $e->getMessage());
-            return [
-                'success' => false,
-                'message' => 'Erro ao conectar à API para criar fatura.',
-            ];
-        }
-    }
-
     public function addClient($userId)
 {
     // Obter o utilizador da base de dados
@@ -146,7 +108,7 @@ public function validateToken()
 
     // Configurar a URL e o token
     $url = config('services.gesfaturacao.url') . '/' . config('services.gesfaturacao.version') . '/client';
-    $token = env('TOKEN'); // Buscar o token diretamente do .env
+    $token = env('TOKEN');
 
     // Dados para enviar na requisição
     $data = http_build_query([
@@ -200,7 +162,7 @@ public function validateToken()
 
         // Verificar o sucesso da resposta
         if ($httpCode === 200 && isset($responseData['id'])) {
-            // Atualizar o `id_gesfaturacao` no banco de dados
+            // Atualizar o `id_gesfaturacao` na base de dados
             $user->id_gesfaturacao = $responseData['id'];
             $user->save();
 
@@ -223,6 +185,122 @@ public function validateToken()
         return response()->json(['success' => false, 'message' => 'Erro ao adicionar cliente na API.', 'error' => $e->getMessage()], 500);
     }
 }
+/**
+ * Cria uma fatura-recibo na API GESFaturação.
+ *
+ * @param array $invoiceData Dados necessários para criar a fatura-recibo.
+ * @return \Illuminate\Http\JsonResponse Resposta da API
+ */
+public function createReceiptInvoice(array $invoiceData)
+{
+    $url = config('services.gesfaturacao.url') . '/' . config('services.gesfaturacao.version') . '/sales/receipt-invoice';
+    $token = env('TOKEN');
+
+    // Verificar se o campo 'client' foi fornecido
+    if (!isset($invoiceData['client']) || empty($invoiceData['client'])) {
+        Log::error('O campo "client" é obrigatório para criar uma fatura-recibo.');
+        return response()->json(['success' => false, 'message' => 'O campo "client" é obrigatório para criar uma fatura-recibo.'], 400);
+    }
+
+    // Adicionar os campos obrigatórios para fatura-recibo
+    $invoiceData['payment'] = 1; // Indica que a fatura foi paga
+    $invoiceData['bank'] = 0; // Indica que não foi feito via banco
+    $invoiceData['needsBank'] = 0; // Não necessita de detalhes bancários
+
+    // Configurar o cURL para fazer a requisição
+    $curl = curl_init();
+
+    curl_setopt_array($curl, [
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS => http_build_query($invoiceData),
+        CURLOPT_HTTPHEADER => [
+            "Authorization: $token",
+            'Content-Type: application/x-www-form-urlencoded',
+        ],
+    ]);
+
+    // Executa a requisição e captura a resposta
+    $response = curl_exec($curl);
+    $error = curl_error($curl); // Captura erros do cURL
+    curl_close($curl); // Fecha a sessão do cURL
+
+    // Se ocorrer um erro no cURL
+    if ($error) {
+        Log::error('Erro no cURL ao criar a fatura-recibo: ' . $error);
+        return response()->json(['success' => false, 'message' => 'Erro ao criar a fatura-recibo.', 'error' => $error], 500);
+    }
+
+    // Converte a resposta para JSON
+    $responseData = json_decode($response, true);
+
+    // Verifica se a fatura-recibo foi criada com sucesso
+    if (isset($responseData['id']) && isset($responseData['document'])) {
+        Log::info('Fatura-recibo criada com sucesso.', ['response' => $responseData]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Fatura-recibo criada com sucesso.',
+            'response' => $responseData,
+        ]);
+    }
+
+    // Caso ocorra erro na criação da fatura-recibo
+    Log::error('Erro ao criar a fatura-recibo.', ['response' => $responseData]);
+    return response()->json([
+        'success' => false,
+        'message' => 'Erro ao criar a fatura-recibo.',
+        'response' => $responseData,
+    ], 400);
+}
+
+
+public function payInvoice($invoiceId)
+{
+    $url = config('services.gesfaturacao.url') . '/' . config('services.gesfaturacao.version') . "/sales/invoice/{$invoiceId}/pay";
+    $token = env('TOKEN');
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, [
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST => 'PATCH',
+        CURLOPT_HTTPHEADER => [
+            "Authorization: $token",
+        ],
+    ]);
+
+    $response = curl_exec($curl);
+    $error = curl_error($curl);
+    curl_close($curl);
+
+    if ($error) {
+        Log::error('Erro no cURL ao pagar fatura: ' . $error);
+        return response()->json(['success' => false, 'message' => 'Erro ao processar o pagamento.', 'error' => $error], 500);
+    }
+
+    $responseData = json_decode($response, true);
+
+    if (isset($responseData['success']) && $responseData['success']) {
+        Log::info('Fatura paga com sucesso.', ['response' => $responseData]);
+        return response()->json(['success' => true, 'message' => 'Fatura paga com sucesso.', 'response' => $responseData]);
+    }
+
+    Log::error('Erro ao pagar fatura.', ['response' => $responseData]);
+    return response()->json([
+        'success' => false,
+        'message' => 'Erro ao pagar fatura.',
+        'response' => $responseData
+    ], 400);
+}
 
 
 }
+
+

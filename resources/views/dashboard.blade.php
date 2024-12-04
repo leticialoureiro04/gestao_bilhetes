@@ -43,7 +43,7 @@
             </div>
 
             <div class="col-lg-3 col-6">
-                <div class="small-box bg-warning">
+                <div class="small-box bg-pink">
                     <div class="inner">
                         <h3>44</h3>
                         <p>{{ __('messages.games') }}</p>
@@ -81,6 +81,47 @@
                     <a href="{{ route('relatorios.index') }}" class="small-box-footer">{{ __('messages.generate_reports') }} <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
+
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-teal">
+                    <div class="inner">
+                        <h3>{{ __('messages.invoices') }}</h3>
+                        <p>{{ __('messages.manage_invoices') }}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <a href="{{ route('invoices.index') }}" class="small-box-footer">
+                        {{ __('messages.go_to_invoices') }} <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-cyan">
+                    <div class="inner">
+                        <h3>{{ __('messages.seats') }}</h3>
+                        <p>{{ __('messages.manage_seats') }}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-chair"></i>
+                    </div>
+                    <a href="{{ route('seats.index') }}" class="small-box-footer">{{ __('messages.manage_seats') }} <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-purple">
+                    <div class="inner">
+                        <h3>{{ __('messages.teams') }}</h3>
+                        <p>{{ __('messages.manage_teams') }}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <a href="{{ route('teams.index') }}" class="small-box-footer">{{ __('messages.manage_teams') }} <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+
         </div>
 
         <!-- Gráficos -->

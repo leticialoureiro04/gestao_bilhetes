@@ -12,6 +12,9 @@ class SeatType extends Model
     protected $fillable = [
         'name',
         'description',
-        'price', 
+        'price',
+        'product_id', // Adiciona o product_id como preenchível
     ];
+
 }
+

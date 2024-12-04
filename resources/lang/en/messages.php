@@ -17,5 +17,12 @@ return [
     'tickets_sold_by_type' => 'Tickets Sold by Type',
     'week' => 'Week',
     'sales' => 'Sales',
+    'invoices' => 'Invoices',
+    'manage_invoices' => 'Manage Invoices',
+    'go_to_invoices' => 'Go to Invoices',
+    'seats' => 'Seats',
+    'manage_seats' => 'Manage Seats',
+    'teams' => 'Teams',
+    'manage_teams' => 'Manage Teams',
 ];
 

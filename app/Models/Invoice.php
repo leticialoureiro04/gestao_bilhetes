@@ -19,6 +19,7 @@ class Invoice extends Model
         'status',
         'user_id',
         'title',
+        'invoice_id', // Novo campo
     ];
 
     // Relacionamento com Tickets
