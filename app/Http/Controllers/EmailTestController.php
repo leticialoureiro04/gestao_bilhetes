@@ -8,14 +8,22 @@ class EmailTestController extends Controller
 {
     public function sendTestEmail()
     {
-        $details = [
-            'title' => 'Teste de E-mail',
-            'body' => 'Este é um teste de envio de e-mail com o SendGrid em Laravel.'
-        ];
+        $user = [
+            'name' => 'Letícia Cruz Loureiro',
+            'email' => 'leticiacruzloureiro2004@gmail.com'
+        ]; // Informações do usuário para personalizar o e-mail
 
-        Mail::to('leticiacruzloureiro2004@gmail.com')->send(new \App\Mail\TestEmail($details));
+        $filePath = public_path('files/relatorio-teste.pdf'); // Caminho do arquivo a ser anexado
+
+        // Verifique se o arquivo existe antes de enviar o e-mail
+        if (!file_exists($filePath)) {
+            return 'Arquivo não encontrado: ' . $filePath;
+        }
+
+        Mail::to($user['email'])->send(new \App\Mail\TestEmail($user, $filePath));
 
         return 'E-mail enviado com sucesso!';
     }
 }
+
 
