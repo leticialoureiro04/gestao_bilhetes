@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import '~flag-icons/sass/flag-icons';
+
+[x-cloak] {
+    display: none;
+}
+
+/* Novo estilo sugerido */
+.seat-layout {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Define duas colunas iguais */
+    gap: 2rem; /* Espaçamento entre os itens */
+    margin-top: 2rem; /* Espaçamento superior */
+}
+
+.seat-layout .stand {
+    padding: 1rem;
+    border: 2px solid #ccc; /* Borda para destacar */
+    border-radius: 0.5rem; /* Borda arredondada */
+    text-align: center; /* Centraliza o texto */
+    background-color: #f9f9f9; /* Cor de fundo */
+    transition: all 0.3s ease; /* Transição suave */
+}
+
+.seat-layout .stand:hover {
+    background-color: #e2e8f0; /* Cor de fundo ao passar o mouse */
+    cursor: pointer; /* Cursor de clique */
+    transform: scale(1.05); /* Leve aumento ao passar o mouse */
+}
