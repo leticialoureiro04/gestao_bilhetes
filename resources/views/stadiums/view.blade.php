@@ -84,7 +84,7 @@
     .north { grid-area: north; background-color: blue; }
     .south { grid-area: south; background-color: red; }
     .east  { grid-area: east; background-color: orange; }
-    .west  { grid-area: west; background-color: yellow; }
+    .west  { grid-area: west; background-color: #daa520; }
 
     .field {
         grid-area: field;
