@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Session;
 
 class ExportController extends Controller
 {
-    // Função para exibir a nova página de relatórios
+    // Função para mostrar a página de relatórios
     public function show()
     {
         $locale = Session::get('locale', config('app.locale'));
@@ -95,14 +95,14 @@ class ExportController extends Controller
         // Geração do PDF
         $pdf = Pdf::loadView('exports.tickets_pdf', compact('tickets'));
 
-        // Caminho para salvar temporariamente o PDF
+        // Caminho para guardar temporariamente o PDF
         $filePath = storage_path('app/public/bilhetes.pdf');
         $pdf->save($filePath);
 
         // Configurar destinatário e enviar o email
         $user = (object) [
             'name' => 'Administrador',
-            'email' => 'diogoazevedo@ipvc.pt', // Substituir pelo email do destinatário
+            'email' => 'diogoazevedo@ipvc.pt',
         ];
         Mail::to($user->email)->send(new TestEmail($user, $filePath));
 
@@ -119,18 +119,18 @@ class ExportController extends Controller
         $stadiumId = request()->input('stadium');
         $bancadaId = request()->input('bancada');
 
-        // Gere o arquivo Excel
+        // Gere o ficheiro Excel
         $filePath = storage_path('app/private/public/bilhetes.xlsx');
         Excel::store(new TicketsExport($stadiumId, $bancadaId), 'public/bilhetes.xlsx');
 
-        // Envie o arquivo por e-mail
+        // Enviar o ficheiro por e-mail
         $this->sendEmailWithAttachment($filePath);
 
         return response()->download($filePath)->deleteFileAfterSend(true);
     }
     private function sendEmailWithAttachment($filePath, $fileName = 'relatorio.xlsx')
     {
-        // Simulando um usuário para enviar o email
+        // Simulando um utlizador para enviar o email
         $user = (object) [
             'name' => 'Administrador',
             'email' => 'diogoazevedo@ipvc.pt', // Substituir pelo email do destinatário

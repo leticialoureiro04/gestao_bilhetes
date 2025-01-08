@@ -11,13 +11,13 @@ class EmailTestController extends Controller
         $user = [
             'name' => 'Letícia Cruz Loureiro',
             'email' => 'leticiacruzloureiro2004@gmail.com'
-        ]; // Informações do usuário para personalizar o e-mail
+        ]; // Informações do utilizador para personalizar o e-mail
 
-        $filePath = public_path('files/relatorio-teste.pdf'); // Caminho do arquivo a ser anexado
+        $filePath = public_path('files/relatorio-teste.pdf'); // Caminho do ficheiro a ser anexado
 
-        // Verifique se o arquivo existe antes de enviar o e-mail
+        // Verificar se o ficheiro existe antes de enviar o e-mail
         if (!file_exists($filePath)) {
-            return 'Arquivo não encontrado: ' . $filePath;
+            return 'Ficheiro não encontrado: ' . $filePath;
         }
 
         Mail::to($user['email'])->send(new \App\Mail\TestEmail($user, $filePath));

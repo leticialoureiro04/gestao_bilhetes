@@ -8,7 +8,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\App;
-use App\Http\Controllers\GESFaturacaoAPIController; // Importa o controlador GESFaturacaoAPI
+use App\Http\Controllers\GESFaturacaoAPIController;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
@@ -77,8 +77,6 @@ public function store(Request $request)
     return redirect()->route('dashboard')->with('success', 'Utilizador criado e logado com sucesso!');
 }
 
-
-
     // Função para mostrar o formulário de edição de utilizador
     public function edit(User $user)
     {
@@ -135,14 +133,13 @@ public function store(Request $request)
         return redirect()->route('users.index')->with('success', 'Papel atribuído com sucesso!');
     }
 
-    // Função para exibir o perfil do utilizador autenticado
+    // Função para mostrar o perfil do utilizador autenticado
     public function profile()
     {
         $locale = Session::get('locale', config('app.locale'));
         App::setLocale($locale);
 
-        $user = Auth::user(); // Obter o usuário autenticado
+        $user = Auth::user();
         return view('users.profile', compact('user'));
     }
 }
-

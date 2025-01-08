@@ -31,9 +31,6 @@ class DashboardController extends Controller
             ->orderBy('month', 'asc') // Ordena para garantir a sequência correta
             ->get();
 
-        // Debug para verificar os dados enviados à view (remova depois de verificar)
-        // dd($ticketsByType, $sales);
-
         return view('dashboard', compact('ticketsByType', 'sales'));
     }
 }

@@ -13,16 +13,16 @@ use Illuminate\Support\Facades\Auth;
 
 class GameController extends Controller
 {
-    // Exibe a lista de jogos para o usuário selecionar
+    // Mostra a lista de jogos para o utilizador selecionar
     public function index()
     {
         // Define o idioma com base na sessão
         $locale = Session::get('locale', config('app.locale'));
         App::setLocale($locale);
 
-        $user = Auth::user(); // Obtém o usuário autenticado
+        $user = Auth::user(); // Obtém o utilizador autenticado
 
-        // Verifica o papel do usuário
+        // Verifica o papel do utilizador
         if ($user->roles->contains('name', 'admin')) {
             // Admin vê todos os jogos
             $games = Game::with(['stadium', 'teams'])->get();
@@ -35,8 +35,6 @@ class GameController extends Controller
 
         return view('games.index', compact('games'));
     }
-
-
 
     // Redireciona para a escolha da planta do estádio com base no jogo selecionado
     public function select($game_id)

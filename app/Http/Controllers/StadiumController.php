@@ -113,13 +113,13 @@ class StadiumController extends Controller
 
         // Validar os dados recebidos
         $validated = $request->validate([
-            'stands' => 'required|array', // Certifique-se de que 'stands' é um array
+            'stands' => 'required|array',
             'stands.*.name' => 'required|string|max:255',
             'stands.*.num_rows' => 'required|integer|min:1',
             'stands.*.seats_per_row' => 'required|integer|min:1',
         ]);
 
-        // Iterar sobre as bancadas e salvar cada uma
+        // Iterar sobre as bancadas e guardar cada uma
         foreach ($validated['stands'] as $standData) {
             // Criar ou atualizar a bancada
             $stand = Stand::updateOrCreate(
@@ -146,8 +146,8 @@ class StadiumController extends Controller
                             'seat_number' => $seat,
                         ],
                         [
-                            'seat_type_id' => $seatTypeId, // Define o tipo de lugar
-                            'status' => 'disponível',      // Define o status como disponível por padrão
+                            'seat_type_id' => $seatTypeId,
+                            'status' => 'disponível',
                         ]
                     );
                 }
@@ -172,7 +172,4 @@ public function viewLayout($stadium_id)
         // Retornar a view com o layout do estádio
         return view('stadiums.view', compact('stadium'));
     }
-
-
 }
-

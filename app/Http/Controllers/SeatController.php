@@ -133,10 +133,9 @@ class SeatController extends Controller
     {
         $seats = Seat::where('stadium_id', $stadium_id)
                      ->where('status', 'disponível')
-                     ->with(['seatType', 'stand']) // Inclui stands
+                     ->with(['seatType', 'stand'])
                      ->get();
 
         return response()->json($seats);
     }
 }
-

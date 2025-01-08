@@ -14,16 +14,16 @@ class GESFaturacaoAPIController extends Controller
     private $apiVersion;
     private $token;
 
-    // Configuração inicial (carrega do arquivo services.php)
+    // Configuração inicial (carrega do ficheiro services.php)
     public function __construct()
     {
         $this->apiUrl = config('services.gesfaturacao.url');
         $this->apiVersion = config('services.gesfaturacao.version');
         $this->token = config('services.gesfaturacao.token'); // Obtém o token diretamente do .env
 
-        // Garantir que as configurações estão corretas
+        // Garante que as configurações estão corretas
         if (empty($this->apiUrl) || empty($this->apiVersion) || empty($this->token)) {
-            Log::error('Configuração da API GESFaturação está incompleta. Verifique o arquivo .env.');
+            Log::error('Configuração da API GESFaturação está incompleta. Verifique o ficheiro .env.');
             throw new \Exception('Configuração da API GESFaturação está incompleta.');
         }
     }
@@ -309,8 +309,4 @@ public function payInvoice($invoiceId)
         'response' => $responseData
     ], 400);
 }
-
-
 }
-
-

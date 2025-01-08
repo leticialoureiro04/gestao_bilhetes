@@ -33,11 +33,7 @@ class AuthController extends Controller
      */
     public function renewToken(Request $request)
     {
-        // Chame o método de login para gerar um novo token
+        // Chamar o método de login para gerar um novo token
         return $this->login($request);
     }
 }
-
-
-
-

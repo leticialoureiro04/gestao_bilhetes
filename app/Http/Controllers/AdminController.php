@@ -12,10 +12,10 @@ use App\Models\SeatType;
 
 class AdminController extends Controller
 {
-    // Exibir o Dashboard
+    // Mostrar o Dashboard
     public function dashboard()
     {
-        return view('dashboard'); // Certifique-se de ter o arquivo dashboard.blade.php
+        return view('dashboard'); // Certificarmo-nos de ter o ficheiro dashboard.blade.php
     }
 
     // Gerir Utilizadores

@@ -10,13 +10,13 @@ class SetupController extends Controller
 {
     public function setupRolesAndPermissions()
     {
-        // Criar o papel 'admin' se não existir
+        // Criar o papel 'admin'
         $roleAdmin = Role::firstOrCreate(['name' => 'admin']);
 
-        // Criar o papel 'cliente' se não existir
+        // Criar o papel 'cliente' s
         $roleCliente = Role::firstOrCreate(['name' => 'cliente']);
 
-        // Criar permissões específicas se não existirem
+        // Criar permissões específicas 
         $manageUsersPermission = Permission::firstOrCreate(['name' => 'manage users']);
         $viewTicketsPermission = Permission::firstOrCreate(['name' => 'view tickets']);
         $buyTicketsPermission = Permission::firstOrCreate(['name' => 'buy tickets']);
@@ -36,7 +36,7 @@ class SetupController extends Controller
         }
 
         // Atribuir o papel 'admin' a um utilizador específico
-        $user = User::find(1);  
+        $user = User::find(1);
         if ($user && !$user->hasRole('admin')) {
             $user->assignRole('admin');
         }

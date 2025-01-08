@@ -31,7 +31,7 @@ class SeatTypeController extends Controller
         $request->validate([
             'name' => 'required',
             'description' => 'nullable',
-            'price' => 'required|numeric', // Validação para o campo de preço
+            'price' => 'required|numeric',
         ]);
 
         SeatType::create($request->all());
@@ -52,7 +52,7 @@ class SeatTypeController extends Controller
         $request->validate([
             'name' => 'required',
             'description' => 'nullable',
-            'price' => 'required|numeric', // Validação para o campo de preço
+            'price' => 'required|numeric',
         ]);
 
         $seatType->update($request->all());

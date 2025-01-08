@@ -77,8 +77,6 @@ class TicketController extends Controller
         return redirect()->route('tickets.index')->with('success', 'Bilhete emitido com sucesso!');
     }
 
-
-
     public function edit(Ticket $ticket)
     {
 
@@ -212,9 +210,9 @@ class TicketController extends Controller
 
             $invoiceData = [
                 'client' => $user->id_gesfaturacao, // ID do cliente na API
-                'serie' => 27, // Ajuste o valor da série conforme necessário
+                'serie' => 27, // Ajustar o valor da série conforme necessário
                 'number' => 0,
-                'date' => $currentDate->format('d/m/Y'), // Data ajustada
+                'date' => $currentDate->format('d/m/Y'), // Data
                 'expiration' => now()->addDays(7)->format('d/m/Y'), // Data de vencimento
                 'reference' => 'Fatura-Recibo ' . implode(',', $ticketIds),
                 'dueDate' => 0,
@@ -259,11 +257,6 @@ class TicketController extends Controller
     }
 }
 
-
-
-
-
-
     public function getAvailableSeats(Request $request)
     {
         $seats = Seat::where('stadium_id', $request->stadium_id)
@@ -300,10 +293,3 @@ class TicketController extends Controller
         return response()->json($seats);
     }
 }
-
-
-
-
-
-
-

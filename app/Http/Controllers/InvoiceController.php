@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 class InvoiceController extends Controller
 {
     /**
-     * Exibe a lista de faturas.
+     * Mostra a lista de faturas.
      *
      * @return \Illuminate\View\View
      */
@@ -22,14 +22,14 @@ class InvoiceController extends Controller
         $locale = Session::get('locale', config('app.locale'));
         App::setLocale($locale);
 
-        $user = Auth::user(); // Obtém o usuário autenticado
+        $user = Auth::user();
 
-        // Verifica se o usuário tem o papel de admin
+        // Verifica se o utilizador tem o papel de admin
         if ($user->roles->contains('name', 'admin')) {
-            // Admin vê todas as faturas com o usuário relacionado
+            // Admin vê todas as faturas com o utilizador relacionado
             $invoices = Invoice::with(['user'])->get();
         } else {
-            // Clientes veem apenas suas próprias faturas
+            // Clientes veem apenas as suas próprias faturas
             $invoices = Invoice::where('user_id', $user->id)
                                ->with(['user']) // Inclui o relacionamento
                                ->get();
@@ -37,9 +37,6 @@ class InvoiceController extends Controller
 
         return view('invoices.index', compact('invoices'));
     }
-
-
-
 
     public function show($id)
     {
@@ -74,4 +71,3 @@ class InvoiceController extends Controller
         return redirect()->route('invoices.index')->with('success', 'Fatura paga com sucesso!');
     }
 }
-

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\App;
 
 class StandController extends Controller
 {
-    // Método para exibir a página de configuração das bancadas
+    // Método para mostrar a página de configuração das bancadas
     public function configure($stadium_id)
     {
         $locale = Session::get('locale', config('app.locale'));
@@ -26,7 +26,7 @@ class StandController extends Controller
         return view('stands.configure', compact('stadium', 'seatTypes'));
     }
 
-    // Método para salvar as bancadas configuradas no banco de dados
+    // Método para guardar as bancadas configuradas na base de dados
     public function store(Request $request)
     {
 
@@ -44,7 +44,7 @@ class StandController extends Controller
         // Obtém o ID do estádio
         $stadium_id = $request->stadium_id;
 
-        // Loop através de cada bancada para salvar no banco de dados
+        // Loop através de cada bancada para guardar na base de dados
         foreach ($request->stands as $standData) {
             // Criar a bancada
             $stand = Stand::create([
@@ -107,7 +107,7 @@ class StandController extends Controller
 
         // Armazena as configurações de lugares por tipo para a bancada
         foreach ($request->seats as $seatTypeId => $quantity) {
-            // Crie registros de lugares no banco de dados ou atualize conforme necessário
+            // Cria registos de lugares na base de dados ou atualize conforme necessário
             $stand->seats()->updateOrCreate(
                 ['seat_type_id' => $seatTypeId],
                 ['quantity' => $quantity]
@@ -130,7 +130,7 @@ class StandController extends Controller
 public function getSeats($standId)
 {
     $seats = Seat::where('stand_id', $standId)
-        ->get(['id', 'row_number', 'seat_number', 'status', 'seat_type_id']); // Adicione 'id'
+        ->get(['id', 'row_number', 'seat_number', 'status', 'seat_type_id']);
 
     // Corrige os dados para garantir que o status tenha valores válidos
     foreach ($seats as $seat) {
@@ -142,16 +142,12 @@ public function getSeats($standId)
     return response()->json($seats);
 }
 
-
-
-
-
     public function view($standId)
     {
         $locale = Session::get('locale', config('app.locale'));
         App::setLocale($locale);
 
-        // Buscar a bancada pelo ID e carregar os assentos associados
+        // Procurar a bancada pelo ID e carregar os assentos associados
         $stand = Stand::with('seats')->findOrFail($standId);
 
         // Retornar a view com os dados da bancada e assentos
@@ -159,6 +155,3 @@ public function getSeats($standId)
     }
 
 }
-
-
-
