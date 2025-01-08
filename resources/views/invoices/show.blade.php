@@ -26,8 +26,8 @@
 
             <h5>{{ __('invoices.ticket_information') }}</h5>
             @php
-                $ticketIds = explode(',', $invoice->ticket_id); // If ticket_id is a comma-separated string
-                $tickets = \App\Models\Ticket::whereIn('id', $ticketIds)->get(); // Retrieve related tickets
+                $ticketIds = explode(',', $invoice->ticket_id);
+                $tickets = \App\Models\Ticket::whereIn('id', $ticketIds)->get();
             @endphp
 
             @if($tickets->isNotEmpty())
@@ -46,7 +46,7 @@
                                 <td>
                                     @php
                                         // Convert the row number to a letter (A, B, C, etc.)
-                                        $rowLetter = chr(64 + $ticket->seat->row_number); // Example: 1 -> A
+                                        $rowLetter = chr(64 + $ticket->seat->row_number);
                                         $seatNumber = $ticket->seat->seat_number ?? __('invoices.information_unavailable');
                                     @endphp
                                     {{ $rowLetter }}-{{ $seatNumber }}
@@ -65,5 +65,3 @@
     </div>
 </div>
 @endsection
-
-

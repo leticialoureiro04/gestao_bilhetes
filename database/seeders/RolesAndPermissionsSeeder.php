@@ -17,15 +17,15 @@ class RolesAndPermissionsSeeder extends Seeder
     {
         // Criar um papel de admin
         $roleAdmin = Role::create(['name' => 'admin']);
-        
+
         // Criar uma permissão
         $permission = Permission::create(['name' => 'manage users']);
-        
+
         // Atribuir a permissão ao papel de admin
         $roleAdmin->givePermissionTo($permission);
-        
+
         // Atribuir o papel de admin a um utilizador específico
-        $user = User::find(1);  // Exemplo: Buscar o utilizador com ID 1
+        $user = User::find(1);  // Exemplo: Procurar o utilizador com ID 1
         if ($user) {
             $user->assignRole('admin');
         }

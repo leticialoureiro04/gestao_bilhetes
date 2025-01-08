@@ -206,7 +206,7 @@
             seatDiv.classList.add('btn-selected');
         }
 
-        console.log("Assentos selecionados:", selectedSeats); // Log para depuração
+        console.log("Assentos selecionados:", selectedSeats);
         document.getElementById('confirmPurchase').disabled = selectedSeats.length === 0;
         document.getElementById('selectedSeats').value = JSON.stringify(selectedSeats);
     }

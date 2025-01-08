@@ -8,5 +8,4 @@ return [
         'display' => 'Português',
         'flag-icon' => 'pt',
     ],
-    // Adicione outros idiomas conforme necessário
 ];

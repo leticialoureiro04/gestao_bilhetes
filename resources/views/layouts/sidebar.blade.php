@@ -32,7 +32,7 @@
                     </a>
                 </li>
 
-                <!-- Condicional para verificar se o usuário é um admin -->
+                <!-- Condicional para verificar se o utilizador é um admin -->
                 @if(auth()->check() && auth()->user()->hasRole('admin'))
                     <!-- Administração Dropdown Menu para Administradores -->
                     <li class="nav-item has-treeview">
@@ -87,7 +87,7 @@
                     </li>
                 @endif
 
-                <!-- Condicional para verificar se o usuário é um admin -->
+                <!-- Condicional para verificar se o utilizador é um admin -->
                 @if(auth()->check() && auth()->user()->hasRole('cliente'))
                     <li class="nav-item">
                         <a href="{{ route('games.index') }}" class="nav-link">
@@ -110,7 +110,7 @@
                 @endif
 
 
-                <!-- Condicional para verificar se o usuário é um admin -->
+                <!-- Condicional para verificar se o utilizador é um admin -->
                 @if(auth()->check() && auth()->user()->hasRole('gestor de estadio'))
                     <li class="nav-item">
                         <a href="{{ route('seat_types.index') }}" class="nav-link">
@@ -137,9 +137,3 @@
     </div>
     <!-- /.sidebar -->
 </aside>
-
-
-
-
-
-
