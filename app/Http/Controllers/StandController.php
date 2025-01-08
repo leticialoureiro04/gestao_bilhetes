@@ -128,13 +128,24 @@ class StandController extends Controller
 }
 
 public function getSeats($standId)
-    {
-        // Busque os lugares associados à bancada pelo ID
-        $seats = Seat::where('stand_id', $standId)->get(['row_number', 'seat_number', 'status']);
+{
+    $seats = Seat::where('stand_id', $standId)
+        ->get(['id', 'row_number', 'seat_number', 'status', 'seat_type_id']); // Adicione 'id'
 
-        // Retorne como JSON
-        return response()->json($seats);
+    // Corrige os dados para garantir que o status tenha valores válidos
+    foreach ($seats as $seat) {
+        if (!$seat->status) {
+            $seat->status = 'disponível';
+        }
     }
+
+    return response()->json($seats);
+}
+
+
+
+
+
     public function view($standId)
     {
         $locale = Session::get('locale', config('app.locale'));

@@ -23,4 +23,10 @@ class Game extends Model
         return $this->belongsToMany(Team::class, 'game_teams')
                     ->withPivot('role'); // Inclui a coluna 'role' (casa ou visitante) do pivot
     }
+
+    public function seats()
+    {
+        return $this->belongsToMany(Seat::class, 'game_seat')->withPivot('status')->withTimestamps();
+    }
+
 }

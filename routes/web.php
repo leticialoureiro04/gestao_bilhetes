@@ -24,6 +24,8 @@ use App\Http\Controllers\GESFaturacaoAPIController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
+
+
 Route::get('/', function () {
     // Verifica se o usuário está logado
     if (Auth::check()) {
@@ -167,6 +169,8 @@ Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.ind
 
 Route::post('/invoices/{id}/pay', [InvoiceController::class, 'pay'])->name('invoices.pay');
 
+// Rota personalizada para o register
+Route::post('/register', [UserController::class, 'store'])->name('register');
 
 Route::get('/reencriptar-dados', function () {
     foreach (User::all() as $user) {

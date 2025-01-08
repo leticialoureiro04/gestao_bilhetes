@@ -26,4 +26,8 @@ return [
     'west_stand' => 'West Stand',
     'field' => 'Field',
     'no_information' => 'No information',
+    'buy_seats' => 'Buy Seats',
+    'seats' => 'Seats',
+    'select_stand' => 'Select Stand',
+    'loading_seats' => 'Loading Seats',
 ];

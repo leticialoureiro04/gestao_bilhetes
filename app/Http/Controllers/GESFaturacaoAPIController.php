@@ -97,7 +97,7 @@ public function validateToken()
     ], 401);
 }
 
-    public function addClient($userId)
+public function addClient($userId)
 {
     // Obter o utilizador da base de dados
     $user = User::find($userId);
@@ -107,22 +107,39 @@ public function validateToken()
     }
 
     // Configurar a URL e o token
-    $url = config('services.gesfaturacao.url') . '/' . config('services.gesfaturacao.version') . '/client';
+    $url = 'https://devipvc.gesfaturacao.pt/api/v1.0.3/client';
     $token = env('TOKEN');
-
-    // Dados para enviar na requisição
     $data = http_build_query([
+        'country' => 'PT',
+        'vatNumber' => '999999990',
         'name' => $user->name,
         'email' => $user->email,
-        'vatNumber' => $user->vatNumber,
-        'country' => $user->country,
+        'address' => '',
+        'postalCode' => '',
+        'region' => '',
+        'city' => '',
+        'website' => '',
+        'mobile' => '',
+        'telephone' => '',
+        'fax' => '',
+        'representativeName' => '',
+        'representativeEmail' => '',
+        'representativeMobile' => '',
+        'representativeTelephone' => '',
+        'paymentMethod' => '',
+        'paymentCondition' => '',
+        'discount' => '',
+        'accountType' => '',
+        'internalCode' => '',
+        'id' => '',
+        'comments' => '',
     ]);
 
     try {
         // Inicializar cURL
         $curl = curl_init();
 
-        // Configurar as opções do cURL
+        // Configurar o cURL
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
@@ -140,29 +157,26 @@ public function validateToken()
             ],
         ]);
 
-        // Executar a requisição
+        // Executar o cURL
         $response = curl_exec($curl);
-        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE); // Código HTTP da resposta
         $error = curl_error($curl);
 
-        // Fechar a conexão cURL
         curl_close($curl);
 
-        // Verificar erros na requisição
+        // Verificar erros no cURL
         if ($error) {
             Log::error('Erro no cURL: ' . $error);
-            return response()->json(['success' => false, 'message' => 'Erro na requisição cURL.', 'error' => $error], 500);
+            return response()->json(['success' => false, 'message' => 'Erro no cURL.', 'error' => $error], 500);
         }
 
         // Converter a resposta para JSON
         $responseData = json_decode($response, true);
 
-        // Log para depuração
-        Log::info('Add Client API Response: ', ['response' => $responseData]);
+        // Log da resposta
+        Log::info('Add Client Response: ', ['response' => $responseData]);
 
-        // Verificar o sucesso da resposta
-        if ($httpCode === 200 && isset($responseData['id'])) {
-            // Atualizar o `id_gesfaturacao` na base de dados
+        // Verificar se a API retornou sucesso
+        if (isset($responseData['id'])) {
             $user->id_gesfaturacao = $responseData['id'];
             $user->save();
 
@@ -172,19 +186,15 @@ public function validateToken()
                 'id_gesfaturacao' => $responseData['id'],
             ]);
         } else {
-            // Tratar erros retornados pela API
-            return response()->json([
-                'success' => false,
-                'message' => 'Erro ao adicionar cliente na API.',
-                'response' => $responseData,
-            ], $httpCode);
+            Log::error('Erro na resposta da API:', ['response' => $responseData]);
+            return response()->json(['success' => false, 'message' => 'Erro na resposta da API.', 'response' => $responseData], 500);
         }
     } catch (\Exception $e) {
-        // Capturar exceções e logar
-        Log::error('Erro ao adicionar cliente na API: ' . $e->getMessage());
-        return response()->json(['success' => false, 'message' => 'Erro ao adicionar cliente na API.', 'error' => $e->getMessage()], 500);
+        Log::error('Erro no addClient: ' . $e->getMessage());
+        return response()->json(['success' => false, 'message' => 'Erro ao adicionar cliente.', 'error' => $e->getMessage()], 500);
     }
 }
+
 /**
  * Cria uma fatura-recibo na API GESFaturação.
  *

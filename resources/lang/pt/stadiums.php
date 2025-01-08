@@ -26,4 +26,8 @@ return [
     'west_stand' => 'Bancada Poente',
     'field' => 'Campo',
     'no_information' => 'Sem informações',
+    'buy_seats' => 'Comprar Lugares',
+    'seats' => 'Lugares',
+    'select_stand' => 'Selecione uma bancada',
+    'loading_seats' => 'Carregando Lugares',
 ];

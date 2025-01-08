@@ -11,6 +11,7 @@ class Seat extends Model
 
     // Campos permitidos para inserção em massa
     protected $fillable = [
+        'stadium_id',
         'stadium_plan_id',
         'seat_type_id',
         'stand_id',
@@ -41,6 +42,11 @@ class Seat extends Model
     public function stand()
     {
         return $this->belongsTo(Stand::class);
+    }
+
+    public function stadium()
+    {
+        return $this->belongsTo(Stadium::class);
     }
 
     /**
@@ -80,5 +86,13 @@ class Seat extends Model
         $lastSeat = self::where('stadium_plan_id', $stadiumPlanId)->max('seat_number');
         return $lastSeat ? $lastSeat + 1 : 1;
     }
+
+    public function games()
+    {
+        return $this->belongsToMany(Game::class, 'game_seat')->withPivot('status')->withTimestamps();
+    }
+
+
+
 }
 

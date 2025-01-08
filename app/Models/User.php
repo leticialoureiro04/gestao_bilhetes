@@ -90,6 +90,16 @@ class User extends Authenticatable
             return $value; // Caso não esteja encriptado, retorna o valor original.
         }
     }
+
+    protected static function booted()
+{
+    static::created(function ($user) {
+        if ($user->roles->isEmpty()) {
+            $user->assignRole('cliente'); // Atribuir papel cliente por defeito
+        }
+    });
+}
+
 }
 
 

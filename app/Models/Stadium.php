@@ -27,4 +27,10 @@ class Stadium extends Model
 {
     return $this->hasMany(Stand::class);
 }
+
+public function seats()
+{
+    return $this->hasMany(Seat::class);
+}
+
 }

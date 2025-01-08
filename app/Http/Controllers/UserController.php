@@ -8,6 +8,8 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\App;
+use App\Http\Controllers\GESFaturacaoAPIController; // Importa o controlador GESFaturacaoAPI
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -19,12 +21,7 @@ class UserController extends Controller
 
         $users = User::with('roles')->get();
 
-        // Verificar e atribuir o papel 'cliente' para utilizadores que não têm nenhum papel
-        foreach ($users as $user) {
-            if ($user->roles->isEmpty()) {
-                $user->syncRoles(['cliente']); // Usa syncRoles para garantir que a role seja definida corretamente
-            }
-        }
+
 
         return view('users.index', compact('users'));
     }
@@ -38,25 +35,49 @@ class UserController extends Controller
         return view('users.create');  // Mostra o formulário de criação de utilizador
     }
 
-    // Função para guardar o novo utilizador na base de dados
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8',
-        ]);
+public function store(Request $request)
+{
+    $validatedData = $request->validate([
+        'name' => 'required|max:255',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|min:8',
+    ]);
 
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => bcrypt($validatedData['password']),
-        ]);
+    // Criar o utilizador
+    $user = User::create([
+        'name' => $validatedData['name'],
+        'email' => $validatedData['email'],
+        'password' => bcrypt($validatedData['password']),
+        'country' => 'PT', // Adiciona o country diretamente
+        'vatNumber' => '999999990', // Valor fixo
+    ]);
 
-        $user->syncRoles(['cliente']);
+    $user->syncRoles(['cliente']); // Atribuir papel 'cliente'
 
-        return redirect()->route('users.index')->with('success', 'Utilizador criado com sucesso e atribuído o papel de Cliente.');
+    // Chamar a API GESFaturacao
+    try {
+        $apiController = new GESFaturacaoAPIController();
+        $response = $apiController->addClient($user->id);
+
+        // Validar a resposta
+        if ($response->getData()->success) {
+            $user->id_gesfaturacao = $response->getData()->id_gesfaturacao;
+            $user->save();
+        } else {
+            Log::error('Erro na integração com GESFaturacao', ['response' => $response->getData()]);
+        }
+    } catch (\Exception $e) {
+        Log::error('Erro ao chamar a API GESFaturacao: ' . $e->getMessage());
     }
+
+    // Fazer login automático do utilizador
+    Auth::login($user);
+
+    // Redirecionar para a dashboard
+    return redirect()->route('dashboard')->with('success', 'Utilizador criado e logado com sucesso!');
+}
+
+
 
     // Função para mostrar o formulário de edição de utilizador
     public function edit(User $user)
@@ -98,7 +119,7 @@ class UserController extends Controller
     {
         $locale = Session::get('locale', config('app.locale'));
         App::setLocale($locale);
-        
+
         $roles = Role::all();
         return view('users.assign_role', compact('user', 'roles'));
     }

@@ -28,22 +28,36 @@ class SeatController extends Controller
 
         $stadiumPlans = StadiumPlan::with('stadium')->get();
         $seatTypes = SeatType::all();
-        $stands = Stand::all(); // Adiciona stands aqui
+        $stands = Stand::all();
         return view('seats.create', compact('stadiumPlans', 'seatTypes', 'stands'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'stadium_plan_id' => 'required|exists:stadium_plans,id',
-            'seat_type_id' => 'required|exists:seat_types,id',
             'stand_id' => 'required|exists:stands,id',
+            'seat_type_id' => 'required|exists:seat_types,id',
             'row_number' => 'required|integer|min:1',
             'seat_number' => 'required|integer|min:1',
             'status' => 'required|in:disponível,reservado,vendido',
         ]);
 
-        Seat::create($request->all());
+        // Obter o stand e o estádio associado
+        $stand = Stand::with('stadium')->findOrFail($request->stand_id);
+
+        if (!$stand->stadium) {
+            return redirect()->route('seats.index')->with('error', 'Estádio não encontrado para o stand selecionado.');
+        }
+
+        // Criar o assento com o campo stadium_id atribuído
+        Seat::create([
+            'stadium_id' => $stand->stadium->id,
+            'stand_id' => $request->stand_id,
+            'seat_type_id' => $request->seat_type_id,
+            'row_number' => $request->row_number,
+            'seat_number' => $request->seat_number,
+            'status' => $request->status,
+        ]);
 
         return redirect()->route('seats.index')->with('success', 'Lugar criado com sucesso!');
     }
@@ -62,19 +76,32 @@ class SeatController extends Controller
     public function update(Request $request, Seat $seat)
     {
         $request->validate([
-            'stadium_plan_id' => 'required|exists:stadium_plans,id',
-            'seat_type_id' => 'required|exists:seat_types,id',
             'stand_id' => 'required|exists:stands,id',
+            'seat_type_id' => 'required|exists:seat_types,id',
             'row_number' => 'required|integer|min:1',
             'seat_number' => 'required|integer|min:1',
             'status' => 'required|in:disponível,reservado,vendido',
         ]);
 
-        $seat->update($request->all());
+        // Obter o stand e o estádio associado
+        $stand = Stand::with('stadium')->findOrFail($request->stand_id);
+
+        if (!$stand->stadium) {
+            return redirect()->route('seats.index')->with('error', 'Estádio não encontrado para o stand selecionado.');
+        }
+
+        // Atualizar o assento com o campo stadium_id atribuído
+        $seat->update([
+            'stadium_id' => $stand->stadium->id,
+            'stand_id' => $request->stand_id,
+            'seat_type_id' => $request->seat_type_id,
+            'row_number' => $request->row_number,
+            'seat_number' => $request->seat_number,
+            'status' => $request->status,
+        ]);
 
         return redirect()->route('seats.index')->with('success', 'Lugar atualizado com sucesso!');
     }
-
     public function destroy(Seat $seat)
     {
         $locale = Session::get('locale', config('app.locale'));
@@ -84,32 +111,32 @@ class SeatController extends Controller
         return redirect()->route('seats.index')->with('success', 'Lugar eliminado com sucesso!');
     }
 
-public function getAvailableSeats($stadium_id)
-{
-    $seats = Seat::where('status', 'disponível')
-                 ->where('stadium_id', $stadium_id)
-                 ->with('seatType')
-                 ->get()
-                 ->map(function($seat) {
-                     return [
-                         'id' => $seat->id,
-                         'planta' => $seat->planta,
-                         'tipo' => $seat->seatType->name,
-                         'price' => $seat->seatType->price
-                     ];
-                 });
+    public function getAvailableSeats($stadium_id)
+    {
+        $seats = Seat::where('status', 'disponível')
+                     ->where('stadium_id', $stadium_id)
+                     ->with('seatType')
+                     ->get()
+                     ->map(function($seat) {
+                         return [
+                             'id' => $seat->id,
+                             'stand' => $seat->stand->name ?? null,
+                             'tipo' => $seat->seatType->name,
+                             'price' => $seat->seatType->price
+                         ];
+                     });
 
-    return response()->json(['seats' => $seats]);
+        return response()->json(['seats' => $seats]);
+    }
+
+    public function getSeatsByStadium($stadium_id)
+    {
+        $seats = Seat::where('stadium_id', $stadium_id)
+                     ->where('status', 'disponível')
+                     ->with(['seatType', 'stand']) // Inclui stands
+                     ->get();
+
+        return response()->json($seats);
+    }
 }
 
-public function getSeatsByStadium($stadium_id)
-{
-    $seats = Seat::where('stadium_plan_id', $stadium_id)
-                 ->where('status', 'disponível')
-                 ->with(['seatType', 'stand']) // Inclui stands
-                 ->get();
-
-    return response()->json($seats);
-}
-
-}
