@@ -27,7 +27,7 @@ use App\Models\User;
 
 
 Route::get('/', function () {
-    // Verifica se o usuário está logado
+    // Verifica se o utilizador está logado
     if (Auth::check()) {
         // Redireciona para o dashboard se estiver logado
         return redirect()->route('dashboard');
@@ -48,7 +48,7 @@ Route::middleware([
     })->name('dashboard');
 });
 
-// Rota de perfil do usuário
+// Rota de perfil do utilizador
 Route::get('/perfil', [UserController::class, 'profile'])->name('profile');
 
 // Rotas de CRUD de utilizadores
@@ -64,7 +64,7 @@ Route::get('/games/{game_id}/choose-plan', [StadiumPlanController::class, 'choos
 // Rotas para selecionar e comprar bilhetes para lugares na planta do estádio
 Route::get('/stadium-plan/{id}/seats', [StadiumPlanController::class, 'viewSeats'])->name('stadium.plan.seats');
 
-// Rotas de compra de bilhetes e listagem de bilhetes do usuário
+// Rotas de compra de bilhetes e listagem de bilhetes do utilizador
 Route::middleware('auth')->group(function () {
     Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
     Route::post('/buy-tickets', [TicketController::class, 'buyTickets'])->name('tickets.buy');
@@ -78,7 +78,7 @@ Route::resource('stadiums', StadiumController::class)->middleware('auth');
 Route::resource('seat_types', SeatTypeController::class)->middleware('auth');
 Route::resource('seats', SeatController::class)->middleware('auth');
 
-// Rotas para gerenciamento de papéis
+// Rotas para gerir papéis
 Route::resource('roles', RoleController::class)->middleware('auth');
 Route::get('/users/{user}/assign-role', [UserController::class, 'assignRoleForm'])->name('users.assign_role')->middleware('auth');
 Route::post('/users/{user}/assign-role', [UserController::class, 'assignRole'])->name('users.assign_role.store')->middleware('auth');
@@ -98,14 +98,14 @@ Route::post('tickets/{ticket}/reserve', [TicketController::class, 'reserve'])->n
 Route::get('/seats/{stadium_id}', [SeatController::class, 'getSeatsByStadium'])->name('seats.byStadium');
 Route::get('/api/seats/{stadium_id}', [SeatController::class, 'getAvailableSeats']);
 
-// Rota para obter plantas de estádio específicas por estádio (para uso em JavaScript)
+// Rota para obter plantas de estádio específicas por estádio 
 Route::get('/get-stadium-plans-by-stadium', [StadiumPlanController::class, 'getStadiumPlansByStadiumId'])->name('getStadiumPlansByStadium');
 Route::get('/get-seats-by-type-and-plan', [TicketController::class, 'getSeatsByTypeAndPlan'])->name('getSeatsByTypeAndPlan');
 
 // Rota para a visualização interativa da planta do estádio
 Route::get('/stadium-plan/{id}', [StadiumPlanController::class, 'show'])->name('stadium.plan.show');
 
-// Rota para configurar papéis e permissões (pode ser duplicada, verifique a necessidade)
+// Rota para configurar papéis e permissões
 Route::get('/setup-roles-permissions', [SetupController::class, 'setupRolesAndPermissions']);
 
 Route::get('/stands/configure/{stadium_id}', [StandController::class, 'configure'])->name('stands.configure');
